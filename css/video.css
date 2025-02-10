@@ -1,0 +1,166 @@
+:root {
+    /* Biến màu chung */
+    --primary-color: #bbff00; /* Màu chính */
+    --secondary-color: #640055; /* Màu phụ */
+    --background-color: #181818; /* Màu nền tối */
+    --text-color: #000000; /* Màu chữ chính */
+    --secondary-text-color: #ffffff; /* Màu chữ phụ */
+    --card-bg-color: #202020; /* Nền thẻ phim tối */
+    --card-bg-light: #ff0000; /* Nền thẻ phim sáng */
+    --navbar-bg-color: #141414; /* Nền navbar */
+    --card-border-color-dark: #020202; /* Viền thẻ phim tối */
+    --card-border-color-light: #ff0000; /* Viền thẻ phim sáng */
+    --h1-dark-color: #ff0000;  /* Màu tiêu đề h1 chế độ tối */
+    --h1-light-color: #000000; /* Màu tiêu đề h1 chế độ sáng */
+}
+
+/* Chế độ sáng */
+body.light-theme {
+    --background-color: #ffffff; /* Nền sáng */
+    --text-color: #000000; /* Màu chữ sáng */
+    --secondary-text-color: #000000;
+    --card-bg-color: #000000; /* Nền thẻ phim sáng */
+    --navbar-bg-color: #ff0000;
+    --card-border-color-light: #000000;
+    --h1-dark-color: #000000;
+    --primary-color: #ff0000;
+    --secondary-color: #004a22;
+}
+
+.light-theme {
+    --bg-color: #ffffff;
+    --text-color: #ffffff;
+    --card-bg: #f5f5f5;
+    --border-color: #ccc;
+}
+
+#video-player-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: 1cm;
+    padding-bottom: 1cm;
+}
+
+/* Video Player Container */
+.VideoPlayer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    max-width: 1200px;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    padding: 15px;
+    color: var(--text-color); /* Ensure text color is dynamic based on theme */
+}
+
+/* Additional styles for light theme */
+body.light-theme .VideoPlayer {
+    background-color: white; /* Use light theme primary color */
+    color: var(--text-color); /* Light theme text color */
+}
+
+.VideoPlayer h1 {
+    margin-bottom: 10px;
+    text-align: center;
+    color: var(--secondary-text-color);
+    font-size: large;
+}
+
+.VideoPlayer h5 {
+    margin-bottom: 10px;
+    text-align: center;
+    color: var(--secondary-text-color);
+    font-size: 35px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-family: 'Poppins', sans-serif;
+}
+
+.Video {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* Tỷ lệ 16:9 */
+    background-color: black;
+    border: 2px solid #333;
+}
+
+.Video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+.navepi.tagcloud {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #cccccc;
+    text-align: center;
+}
+
+.navepi.tagcloud span {
+    margin: 0 5px;
+    cursor: pointer;
+    color: #ffcc00;
+}
+
+.navepi.tagcloud span:hover {
+    text-decoration: underline;
+}
+
+.episode-list {
+    display: flex;
+    flex-wrap: wrap; /* Cho phép các nút xuống dòng nếu vượt quá chiều ngang */
+    gap: 10px; /* Khoảng cách giữa các nút */
+    list-style: none;
+    padding: 0;
+    justify-content: flex-start; /* Căn các nút sang trái */;
+    text-align: center;
+}
+
+.episode-list li {
+    flex: 0 0 auto; /* Đảm bảo các nút có kích thước cố định */
+    margin: 5px;
+}
+
+.episode-list-container h3{
+    text-align: center;
+    color: var(--secondary-text-color);
+}
+
+h1{
+    text-align: center;
+    color: var(--secondary-text-color);
+}
+
+.episode-list li a {
+    display: inline-block;
+    background-color: var(); /* Nền thẻ phim */
+    color: var(--secondary-text-color); /* Màu chữ sáng/tối */
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 8px 16px; /* Kích thước nút */
+    border: 2px solid var(--secondary-text-color); /* Viền thẻ phim */
+    border-radius: 4px; /* Bo tròn nút */
+    transition: all 0.3s ease; /* Hiệu ứng chuyển đổi mượt mà */
+    text-align: center;
+    min-width: 50px; /* Đảm bảo nút có kích thước tối thiểu */
+}
+
+/* Khi hover vào các nút tập phim */
+.episode-list li a:hover {
+    background-color: red; /* Đổi màu nền khi hover */
+    color: var(--card-bg-color); /* Đổi màu chữ khi hover */
+    border-color: var(--card-bg-color); /* Đổi màu viền khi hover */
+    transform: translateY(-2px); /* Hiệu ứng đẩy nút lên */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Hiệu ứng đổ bóng */
+}

@@ -1,0 +1,330 @@
+:root {
+    /* Biến màu chung */
+    --primary-color: #bbff00; /* Màu chính */
+    --secondary-color: #640055; /* Màu phụ */
+    --background-color: #181818; /* Màu nền tối */
+    --text-color: #000000; /* Màu chữ chính */
+    --secondary-text-color: #ffffff; /* Màu chữ phụ */
+    --card-bg-color: #202020; /* Nền thẻ phim tối */
+    --card-bg-light: #ff0000; /* Nền thẻ phim sáng */
+    --navbar-bg-color: #141414; /* Nền navbar */
+    --card-border-color-dark: #020202; /* Viền thẻ phim tối */
+    --card-border-color-light: #ff0000; /* Viền thẻ phim sáng */
+    --h1-dark-color: #ff0000;  /* Màu tiêu đề h1 chế độ tối */
+    --h1-light-color: #000000; /* Màu tiêu đề h1 chế độ sáng */
+}
+
+/* Chế độ sáng */
+body.light-theme {
+    --background-color: #ffffff; /* Nền sáng */
+    --text-color: #000000; /* Màu chữ sáng */
+    --secondary-text-color: #000000;
+    --card-bg-color: #000000; /* Nền thẻ phim sáng */
+    --navbar-bg-color: #ff0000;
+    --card-border-color-light: #000000;
+    --h1-dark-color: #000000;
+    --primary-color: #ff0000;
+    --secondary-color: #004a22;
+}
+
+.light-theme {
+    --bg-color: #ffffff;
+    --text-color: #ffffff;
+    --card-bg: #f5f5f5;
+    --border-color: #ccc;
+}
+
+/* Cấu hình chung */
+body, .content-wrapper {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#toggle-theme-btn {
+    border: 1px solid var(--primary-color);
+}
+
+.text-center.mb-4 {
+    color: var(--secondary-text-color); /* Đổi màu chữ */
+    font-size: 24px; /* Tăng kích thước chữ */
+    font-weight: bold; /* Làm đậm chữ */
+}
+
+/* Nút chuyển đổi chế độ */
+.theme-toggle {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.3s, color 0.3s;
+}
+.theme-toggle:hover {
+    background: var(--border-color);
+}
+
+/* Navbar */
+.navbar {
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    padding: 10px 20px;
+    box-shadow: 0 4px 8px var(--shadow-dark);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.navbar-toggler {
+    border: 1px solid var(--border-color);
+}
+
+.navbar-light {
+    background: var(--background-light);
+    box-shadow: 0 4px 8px var(--shadow-light);
+}
+
+.navbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.navbar a {
+    color: var(--text-color);
+    font-weight: 600;
+    transition: color 0.3s;
+}
+.navbar-light a {
+    color: var(--text-color);
+}
+.navbar a:hover {
+    color: var(--secondary-color);
+}
+
+/* Thanh tìm kiếm */
+.form-control {
+    width: 250px;
+    border-radius: 5px;
+}
+.form-control:focus {
+    box-shadow: none;
+    border-color: #ffcc00;
+}
+
+/* Nút bấm */
+button {
+    border-radius: 5px;
+}
+
+/* Phân trang */
+#pagination, #pagination-bottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+#pagination input, #pagination-bottom input {
+    width: 60px;
+    text-align: center;
+    margin: 0 5px;
+}
+#pagination button, #pagination-bottom button {
+    padding: 5px 15px;
+    font-size: 1rem;
+}
+#pagination button:hover, #pagination-bottom button:hover {
+    background-color: #ffcc00;
+    color: #fff;
+}
+#pagination button:disabled, #pagination-bottom button:disabled {
+    background-color: #ccc;
+    color: #fff;
+    cursor: not-allowed;
+}
+
+/* Nút "Quay về đầu trang" */
+#back-to-top {
+    z-index: 100;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgb(0, 143, 190);
+}
+
+/* Thẻ phim */
+#film-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+#trending-films {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.details-link {
+    text-decoration: none; /* Loại bỏ gạch dưới */
+    color: var(--secondary-text-color);
+    transition: background-color 0.3s ease;
+}
+
+.film-card {
+    background-color: var(--card-bg);
+    border: 1px solid;
+    padding: 12px;
+    border-radius: 8px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out, border-color 0.3s ease-in-out;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 4mm;
+}
+.film-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+.film-card h2 {
+    font-size: 5.5mm;
+    font-weight: bold;
+    padding-top: 2mm;
+    padding-bottom: 1.5mm;
+}
+.film-card img {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+}
+.film-card .card-body {
+    padding: 10px;
+}
+.film-card .card-body h5 {
+    font-size: 1.1rem;
+    margin: 10px 0;
+    color: #343a40;
+}
+.film-card .card-body p {
+    color: #777;
+    font-size: 0.9rem;
+}
+
+/* Footer */
+footer {
+    background-color: #000000;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+footer p {
+    font-size: 0.9rem;
+    margin: 0;
+}
+footer a {
+    color: #ffcc00;
+    text-decoration: none;
+}
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 821px) {
+    .navbar-nav {
+        text-align: center;
+    }
+    #pagination, #pagination-bottom {
+        flex-direction: column;
+    }
+    .form-control {
+        width: 200px;
+    }
+    #film-container {
+        grid-template-columns: 1fr 1fr;
+    }
+    .navbar-toggler {
+        background-color: #343a40;
+    }
+}
+@media (max-width: 576px) {
+    #film-container {
+        grid-template-columns: 1fr;
+    }
+    .form-control {
+        width: 150px;
+    }
+    #pagination input {
+        width: 40px;
+    }
+}
+
+.search-nguonc-button {
+    display: block;
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    background: linear-gradient(135deg, #ff5722, #ff9800);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.3s ease, transform 0.2s ease-in-out;
+}
+
+.search-nguonc-button:hover {
+    background: linear-gradient(135deg, #e64a19, #f57c00);
+    transform: scale(1.05);
+}
+
+.search-nguonc-button:active {
+    transform: scale(0.95);
+}
+
+.film-card {
+    position: relative;
+    display: inline-block;
+    overflow: visible;
+}
+
+.film-overview {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 300px; /* Điều chỉnh chiều rộng phù hợp */
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 15px;
+    font-size: 16px;
+    opacity: 0;
+    transform: translateY(10px); /* Bắt đầu thấp hơn một chút */
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+    white-space: normal;
+    overflow: visible;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+    display: block;
+    visibility: hidden;
+}
+
+.film-card:hover .film-overview {
+    opacity: 1;
+    transform: translateY(0); /* Trở về vị trí bình thường */
+    visibility: visible;
+}
+
+/* Làm mờ ảnh nhẹ khi hover */
+.film-card:hover img {
+    opacity: 0.3;
+    transition: opacity 0.4s ease-out;
+}
+
+
