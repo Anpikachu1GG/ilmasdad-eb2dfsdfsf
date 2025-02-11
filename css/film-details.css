@@ -414,3 +414,15 @@ footer p {
 .film-rating h4 {
     color: #fff;
 }
+.dropdown-menu button {
+    border: none;
+    background-color: white;
+    color: var(--text-color);
+    font-weight: 600;
+    transition: color 0.3s;
+    padding: 5px 15px;
+}
+
+.dropdown-menu button:hover {
+    color: var(--secondary-color);
+}

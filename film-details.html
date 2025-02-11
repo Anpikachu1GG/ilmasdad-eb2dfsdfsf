@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phim Mới Cập Nhật</title>
+    <title>Chi Tiết Phim</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/film-details.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -22,11 +22,11 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown">Phim Trending</a>
-                        <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
-                            <li><a class="dropdown-item" href="trending-week-tv.html">TV Series\Tuần</a></li>
-                            <li><a class="dropdown-item" href="trending-day-tv.html">TV Series\Ngày</a></li>
-                            <li><a class="dropdown-item" href="trending-day-movie.html">Movie\Ngày</a></li>
-                            <li><a class="dropdown-item" href="trending-week-movie.html">Movie\Tuần</a></li>
+                        <ul class="dropdown-menu" aria-labelledby="TrendingDropdown">
+                            <button onclick="redirectToTrending('movie', 'day')">Movie\Ngày</button>
+                            <button onclick="redirectToTrending('movie', 'week')">Movie\Tuần</button>
+                            <button onclick="redirectToTrending('tv', 'day')">TV Series\Ngày</button>
+                            <button onclick="redirectToTrending('tv', 'week')">TV Series\Tuần</button>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">
@@ -130,6 +130,12 @@
                 <!-- Nút quay về đầu trang -->
             <button id="back-to-top" style="display: none;">Quay về đầu trang</button>
             </main>
+
+            <script>
+                function redirectToTrending(type, timeframe) {
+                    window.location.href = `trending.html?type=${type}&timeframe=${timeframe}`;
+                }
+                </script>
                         
     <footer class="text-center py-3 bg-dark text-light">
         <p>&copy; 2025 Phim Mới. Tất cả quyền lợi được bảo lưu.</p>
