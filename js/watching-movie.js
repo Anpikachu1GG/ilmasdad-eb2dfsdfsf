@@ -112,6 +112,19 @@ function redirectToSearchPage() {
     window.location.href = `search.html?keyword=${encodeURIComponent(keyword)}`;
 }
 
+// Lưu lịch sử xem vào localStorage
+function saveWatchHistory(embedURL, episodeName) {
+    const watchHistory = JSON.parse(localStorage.getItem('watchHistory')) || [];
+    const newEntry = { embed: embedURL, name: episodeName };
+
+    // Kiểm tra nếu tập này đã có trong lịch sử
+    if (!watchHistory.some(entry => entry.embed === embedURL)) {
+        if (watchHistory.length >= 100) watchHistory.shift(); // Xóa mục cũ nhất nếu vượt quá 100 mục
+        watchHistory.push(newEntry);
+        localStorage.setItem('watchHistory', JSON.stringify(watchHistory));
+    }
+}
+
 
 // Hàm tìm kiếm phim
 async function searchMovies() {
@@ -211,4 +224,14 @@ document.getElementById('back-to-top').addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    const movieTitle = localStorage.getItem('movieTitle'); // Lấy tên phim từ localStorage
 
+    if (movieTitle) {
+        // Đặt tiêu đề trang bằng tên phim
+        document.title = movieTitle;
+    } else {
+        // Nếu không tìm thấy tên phim, đặt tiêu đề mặc định
+        document.title = 'movieTitle';
+    }  
+});

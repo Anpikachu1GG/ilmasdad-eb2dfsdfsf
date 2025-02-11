@@ -41,17 +41,42 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </p>
                 <h3>Danh sách tập:</h3>
                 <ul class="episode-list">
-                    ${film.episodes?.[0]?.items?.map(ep => `
-                        <li>
-                            <a href="watching-movie.html?embed=${encodeURIComponent(ep.embed)}&name=${encodeURIComponent(ep.name)}">
-                                Tập ${ep.name}
-                            </a>
-                        </li>`).join('') || '<li>Không có tập nào.</li>'}
+                    ${film.episodes?.[0]?.items.length > 0
+                        ? film.episodes[0].items.map(episode => `
+                            <li>
+                                <a href="watching-movie.html?embed=${encodeURIComponent(episode.embed)}&name=${encodeURIComponent(episode.name)}">
+                                    Tập ${episode.name}
+                                </a>
+                            </li>
+                        `).join('')
+                        : '<li>Không có tập nào.</li>'
+                    }
+                    ${film.episodes?.[0]?.items.length > 30
+                        ? `<button id="show-more-episodes" class="show-more-btn">Xem thêm</button>`
+                        : ''}
                 </ul>
                 <h3>Phim có cùng thể loại:</h3>
                 <div id="related-films" class="related-films"></div>
             </div>
         `;
+
+        const showMoreButton = document.getElementById('show-more-episodes');
+        if (showMoreButton) {
+            showMoreButton.addEventListener('click', () => {
+                document.querySelector('.episode-list').innerHTML = film.episodes[0].items.map(episode => `
+                    <li>
+                        <a href="watching-movie.html?embed=${encodeURIComponent(episode.embed)}&name=${encodeURIComponent(episode.name)}">
+                            Tập ${episode.name}
+                        </a>
+                    </li>
+                `).join('');
+                showMoreButton.style.display = 'none';
+                window.location.href = `watching-movie.html?embed=${encodeURIComponent(film.episodes[0].items[0].embed)}&name=${encodeURIComponent(film.episodes[0].items[0].name)}`;
+            });
+        }
+        if (film.episodes?.[0]?.items) {
+            localStorage.setItem('episodes', JSON.stringify(film.episodes[0].items));
+        }
 
         loadRelatedFilms(genres.map(g => g.slug));
     } catch (error) {
