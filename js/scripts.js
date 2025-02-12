@@ -41,12 +41,12 @@ document.addEventListener('DOMContentLoaded', () => {
     /** 📌 Hàm tải phim theo trang (Kết hợp với điểm TMDB) **/
     const loadFilms = async (page) => {
         if (!filmContainer) return;
-        filmContainer.innerHTML = '<p>⏳ Đang tải phim...</p>';
+        filmContainer.innerHTML = '<h1 class="not-found">⏳ Đang tải phim...</h1>';
 
         const films = await fetchFilms(`https://phim.nguonc.com/api/films/phim-moi-cap-nhat?page=${page}`);
 
         if (films.length === 0) {
-            filmContainer.innerHTML = '<p>⚠️ Không tìm thấy phim nào.</p>';
+            filmContainer.innerHTML = '<p class="not-found">⚠️ Không tìm thấy phim nào.</p>';
             return;
         }
 
@@ -85,11 +85,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         isSearching = true; // Đánh dấu trạng thái tìm kiếm
-        filmContainer.innerHTML = '<p>⏳ Đang tìm kiếm...</p>';
+        filmContainer.innerHTML = '<p class="not-found">⏳ Đang tìm kiếm...</p>';
         const films = await fetchFilms(`https://phim.nguonc.com/api/films/search?keyword=${encodeURIComponent(searchKeyword)}&page=${currentPage}`);
 
         if (films.length === 0) {
-            filmContainer.innerHTML = '<p>⚠️ Không tìm thấy kết quả phù hợp.</p>';
+            filmContainer.innerHTML = '<h1 class="not-found">⚠️ Không tìm thấy kết quả phù hợp.</h1>';
             return;
         }
 

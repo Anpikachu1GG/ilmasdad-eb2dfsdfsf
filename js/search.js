@@ -32,12 +32,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const filmContainer = document.getElementById('film-container');
 
         if (!keyword) {
-            filmContainer.innerHTML = '<p>⚠️ Vui lòng nhập từ khóa để tìm kiếm.</p>';
+            filmContainer.innerHTML = '<p class="not-found">⚠️ Vui lòng nhập từ khóa để tìm kiếm.</p>';
             return;
         }
 
         searchInput.value = keyword; // Hiển thị từ khóa trong ô tìm kiếm
-        filmContainer.innerHTML = '<p>⏳ Đang tải kết quả...</p>';
+        filmContainer.innerHTML = '<p class="not-found">⏳ Đang tải kết quả...</p>';
 
         try {
             const response = await axios.get(`https://phim.nguonc.com/api/films/search?keyword=${encodeURIComponent(keyword)}&page=${page}`);
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
             filmContainer.innerHTML = ''; // Xóa nội dung cũ
 
             if (films.length === 0) {
-                filmContainer.innerHTML = '<p>⚠️ Không tìm thấy phim nào phù hợp.</p>';
+                filmContainer.innerHTML = '<p class="not-found">⚠️ Không tìm thấy phim nào phù hợp.</p>';
                 return;
             }
 
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error('❌ Lỗi khi tìm kiếm phim:', error);
-            filmContainer.innerHTML = '<p>❌ Đã xảy ra lỗi khi tải kết quả. Vui lòng thử lại sau.</p>';
+            filmContainer.innerHTML = '<h1>❌ Đã xảy ra lỗi khi tải kết quả. Vui lòng thử lại sau.</h1>';
         }
     }
 

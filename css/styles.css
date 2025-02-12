@@ -44,6 +44,13 @@ body, .content-wrapper {
     transition: background-color 0.3s, color 0.3s;
 }
 
+.not-found {
+    color: var(--secondary-text-color);
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 20px 0;
+}
+
 #toggle-theme-btn {
     border: 1px solid var(--primary-color);
 }
