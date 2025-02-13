@@ -1,16 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     let currentPage = 1;
-    let isSearching = false; // Kiểm tra trạng thái tìm kiếm
-    let searchKeyword = ''; // Lưu từ khóa tìm kiếm
+    let isSearching = false;
+    let searchKeyword = '';
 
     const filmContainer = document.getElementById('film-container');
     const searchInput = document.getElementById('search-input');
-    const backToTopButton = document.getElementById('back-to-top');
-    const toggleBtn = document.getElementById('toggle-theme-btn');
     const prevBtns = document.querySelectorAll('#previous, #previous-bottom');
     const nextBtns = document.querySelectorAll('#next, #next-bottom');
     const goToPageBtns = document.querySelectorAll('#goToPage, #goToPage-bottom');
-
+    const toggleBtn = document.getElementById('toggle-theme-btn');
     const tmdbApiKey = 'fe149ef5184995f0ce33134201fb0c3d';
 
     /** 📌 Hàm gọi API lấy danh sách phim **/
@@ -24,95 +22,99 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    /** 📌 Hàm tìm điểm đánh giá trên TMDB **/
-    const getTmdbRating = async (originalName) => {
+    /** 📌 Hàm lấy điểm TMDB hàng loạt **/
+    const getTmdbRatings = async (filmNames) => {
         try {
-            if (!originalName) return 'N/A';
-            const searchUrl = `https://api.themoviedb.org/3/search/tv?api_key=${tmdbApiKey}&query=${encodeURIComponent(originalName)}`;
-            const response = await axios.get(searchUrl);
-            const movies = response.data.results;
-            return movies.length ? movies[0].vote_average.toFixed(1) : 'Chưa có đánh giá';
+            const ratings = {};
+            await Promise.all(filmNames.map(async (name) => {
+                const searchUrl = `https://api.themoviedb.org/3/search/multi?api_key=${tmdbApiKey}&query=${encodeURIComponent(name)}`;
+                const response = await axios.get(searchUrl);
+                if (response.data.results.length) {
+                    ratings[name] = response.data.results[0].vote_average?.toFixed(1) || 'Chưa có đánh giá';
+                }
+            }));
+            return ratings;
         } catch (error) {
-            console.error(`❌ Lỗi khi lấy điểm đánh giá TMDB cho phim: ${originalName}`, error);
-            return 'N/A';
+            console.error("❌ Lỗi khi lấy điểm TMDB", error);
+            return {};
         }
     };
 
-    /** 📌 Hàm tải phim theo trang (Kết hợp với điểm TMDB) **/
+    /** 📌 Hàm tải danh sách phim nhanh hơn **/
     const loadFilms = async (page) => {
-        if (!filmContainer) return;
         filmContainer.innerHTML = '<h1 class="not-found">⏳ Đang tải phim...</h1>';
 
         const films = await fetchFilms(`https://phim.nguonc.com/api/films/phim-moi-cap-nhat?page=${page}`);
-
-        if (films.length === 0) {
+        if (!films.length) {
             filmContainer.innerHTML = '<p class="not-found">⚠️ Không tìm thấy phim nào.</p>';
             return;
         }
 
-        let filmHTML = '';
-
-        for (const film of films) {
-            const rating = await getTmdbRating(film.original_name); // Lấy điểm từ TMDB
-
-            filmHTML += `
-                <div class="film-card">
-                    <a href="film-details.html?slug=${film.slug}" class="details-link">
-                        <img src="${film.thumb_url}" alt="${film.original_name}" class="film-image">
-                        <h2>${film.name}</h2>
-                        <p><strong>Tổng số tập:</strong> ${film.total_episodes || 'Chưa rõ'}</p>
-                        <p><strong>Tập hiện tại:</strong> ${film.current_episode || 'Chưa rõ'}</p>
-                        <p><strong>Đạo diễn:</strong> ${film.director || 'Không rõ'}</p>
-                        <p><strong>Dàn diễn viên:</strong> ${film.casts || 'Không rõ'}</p>
-                        <p><strong>Điểm đánh giá:</strong> ⭐ ${rating}/10</p>
-                    </a>
-                </div>`;
-        }
+        let filmHTML = films.map(film => `
+            <div class="film-card" id="film-${film.slug}">
+                <a href="film-details.html?slug=${film.slug}" class="details-link">
+                    <img src="${film.thumb_url}" alt="${film.original_name}" class="film-image">
+                    <h2>${film.name}</h2>
+                    <p><strong>Tổng số tập:</strong> ${film.total_episodes || 'Chưa rõ'}</p>
+                    <p><strong>Tập hiện tại:</strong> ${film.current_episode || 'Chưa rõ'}</p>
+                    <p><strong>Đạo diễn:</strong> ${film.director || 'Không rõ'}</p>
+                    <p><strong>Dàn diễn viên:</strong> ${film.casts || 'Không rõ'}</p>
+                    <p><strong>Điểm TMDB:</strong> ⭐<span id="rating-${film.slug}">⏳ Đang cập nhật...</span>/10</p>
+                </a>
+            </div>
+        `).join('');
 
         filmContainer.innerHTML = filmHTML;
 
-        // Cập nhật trạng thái của các nút phân trang
+        const filmNames = films.map(film => film.original_name);
+        const ratings = await getTmdbRatings(filmNames);
+
+        films.forEach(film => {
+            document.getElementById(`rating-${film.slug}`).textContent = ratings[film.original_name] || 'Chưa có đánh giá';
+        });
+
         prevBtns.forEach(btn => btn.disabled = page === 1);
         nextBtns.forEach(btn => btn.disabled = films.length < 10);
     };
 
-    /** 📌 Hàm tìm kiếm phim (Kết hợp với TMDB) **/
+    /** 📌 Hàm tìm kiếm phim **/
     const searchMovies = async (isPagination = false) => {
         if (!isPagination) {
             searchKeyword = searchInput.value.trim();
             if (!searchKeyword) return alert("🔍 Vui lòng nhập từ khóa tìm kiếm.");
-            currentPage = 1; // Reset về trang đầu khi tìm kiếm mới
+            currentPage = 1;
         }
 
-        isSearching = true; // Đánh dấu trạng thái tìm kiếm
+        isSearching = true;
         filmContainer.innerHTML = '<p class="not-found">⏳ Đang tìm kiếm...</p>';
-        const films = await fetchFilms(`https://phim.nguonc.com/api/films/search?keyword=${encodeURIComponent(searchKeyword)}&page=${currentPage}`);
 
-        if (films.length === 0) {
+        const films = await fetchFilms(`https://phim.nguonc.com/api/films/search?keyword=${encodeURIComponent(searchKeyword)}&page=${currentPage}`);
+        if (!films.length) {
             filmContainer.innerHTML = '<h1 class="not-found">⚠️ Không tìm thấy kết quả phù hợp.</h1>';
             return;
         }
 
-        let filmHTML = '';
-
-        for (const film of films) {
-            const rating = await getTmdbRating(film.original_name); // Lấy điểm từ TMDB
-
-            filmHTML += `
-                <div class="film-card">
-                    <a href="film-details.html?slug=${film.slug}" class="details-link">
-                        <img src="${film.thumb_url}" alt="${film.original_name}" class="film-image">
-                        <h2>${film.name}</h2>
-                        <p><strong>Tổng số tập:</strong> ${film.total_episodes || 'Chưa có thông tin'}</p>
-                        <p><strong>Tập hiện tại:</strong> ${film.current_episode || 'Chưa có thông tin'}</p>
-                        <p><strong>Điểm TMDB:</strong> ⭐ ${rating}/10</p>
-                    </a>
-                </div>`;
-        }
+        let filmHTML = films.map(film => `
+            <div class="film-card" id="film-${film.slug}">
+                <a href="film-details.html?slug=${film.slug}" class="details-link">
+                    <img src="${film.thumb_url}" alt="${film.original_name}" class="film-image">
+                    <h2>${film.name}</h2>
+                    <p><strong>Tổng số tập:</strong> ${film.total_episodes || 'Chưa rõ'}</p>
+                    <p><strong>Tập hiện tại:</strong> ${film.current_episode || 'Chưa rõ'}</p>
+                    <p><strong>Điểm TMDB:</strong> <span id="rating-${film.slug}">⏳ Đang cập nhật...</span></p>
+                </a>
+            </div>
+        `).join('');
 
         filmContainer.innerHTML = filmHTML;
 
-        // Cập nhật trạng thái của các nút phân trang
+        const filmNames = films.map(film => film.original_name);
+        const ratings = await getTmdbRatings(filmNames);
+
+        films.forEach(film => {
+            document.getElementById(`rating-${film.slug}`).textContent = ratings[film.original_name] || 'N/A';
+        });
+
         prevBtns.forEach(btn => btn.disabled = currentPage === 1);
         nextBtns.forEach(btn => btn.disabled = films.length < 10);
     };
@@ -128,11 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
             else return alert("⚠️ Vui lòng nhập số trang hợp lệ!");
         }
 
-        if (isSearching) {
-            searchMovies(true); // Gọi lại tìm kiếm nhưng giữ nguyên từ khóa
-        } else {
-            loadFilms(currentPage);
-        }
+        isSearching ? searchMovies(true) : loadFilms(currentPage);
     };
 
     /** 📌 Hàm bật/tắt chế độ sáng/tối **/
@@ -142,25 +140,18 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleBtn.textContent = document.body.classList.contains('light-theme') ? '🌞' : '🌙';
     };
 
-    /** 📌 Cài đặt các sự kiện **/
+    /** 📌 Cài đặt sự kiện **/
     const setupEventListeners = () => {
         prevBtns.forEach(btn => btn.addEventListener('click', () => handlePagination('prev')));
         nextBtns.forEach(btn => btn.addEventListener('click', () => handlePagination('next')));
         goToPageBtns.forEach(btn => btn.addEventListener('click', () => handlePagination('goTo')));
 
         document.getElementById('search-button')?.addEventListener('click', searchMovies);
-        document.getElementById('toggle-theme-btn')?.addEventListener('click', toggleTheme);
-        document.getElementById('toggle-nav')?.addEventListener('click', () => {
-            document.querySelector('.nav-links')?.classList.toggle('active');
-        });
-
         searchInput?.addEventListener('keypress', event => {
             if (event.key === 'Enter') searchMovies();
         });
 
-        if (backToTopButton) {
-            backToTopButton.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-        }
+        toggleBtn?.addEventListener('click', toggleTheme);
     };
 
     /** 📌 Khởi chạy ứng dụng **/
