@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filmContainer = document.getElementById('film-container');
     const searchInput = document.getElementById('search-input');
     const prevBtns = document.querySelectorAll('#previous, #previous-bottom');
+    const backToTopButton = document.getElementById('back-to-top');
     const nextBtns = document.querySelectorAll('#next, #next-bottom');
     const goToPageBtns = document.querySelectorAll('#goToPage, #goToPage-bottom');
     const toggleBtn = document.getElementById('toggle-theme-btn');
@@ -133,6 +134,16 @@ document.addEventListener('DOMContentLoaded', () => {
         isSearching ? searchMovies(true) : loadFilms(currentPage);
     };
 
+    if (backToTopButton) {
+        window.addEventListener('scroll', () => {
+            backToTopButton.style.display = window.scrollY > 100 ? 'block' : 'none';
+        });
+
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
     /** 📌 Hàm bật/tắt chế độ sáng/tối **/
     const toggleTheme = () => {
         document.body.classList.toggle('light-theme');
@@ -162,3 +173,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     init();
 });
+

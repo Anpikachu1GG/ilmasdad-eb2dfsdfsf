@@ -13,6 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Lấy danh sách tập từ localStorage
     const episodes = JSON.parse(localStorage.getItem('episodes')) || [];
 
+    // Tìm vị trí của tập hiện tại
+    const currentIndex = episodes.findIndex(ep => ep.name === episodeName);
+    const prevEpisode = episodes[currentIndex - 1] || null;
+    const nextEpisode = episodes[currentIndex + 1] || null;
+
     // Tạo giao diện VideoPlayer
     const playerHTML = `
         <div class="VideoPlayer">
@@ -25,6 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     src="${embedURL}" 
                     frameborder="0" scrolling="no" allowfullscreen allow="autoplay">
                 </iframe>
+            </div>
+            <div class="episode-navigation">
+                ${prevEpisode ? `<a href="watching-movie.html?embed=${encodeURIComponent(prevEpisode.embed)}&name=${encodeURIComponent(prevEpisode.name)}" class="prev-episode">⬅ Tập trước</a>` : ''}
+                ${nextEpisode ? `<a href="watching-movie.html?embed=${encodeURIComponent(nextEpisode.embed)}&name=${encodeURIComponent(nextEpisode.name)}" class="next-episode">Tập tiếp theo ➡</a>` : ''}
             </div>
             <span class="BtnLight AAIco-lightbulb_outline lgtbx-lnk"></span>
             <span class="lgtbx"></span>
@@ -39,13 +48,16 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="episode-list-container">
             <h3>Danh sách tập:</h3>
             <ul class="episode-list">
-                ${episodes.map(ep => `
-                    <li>
-                        <a href="watching-movie.html?embed=${encodeURIComponent(ep.embed)}&name=${encodeURIComponent(ep.name)}">
-                            Tập ${ep.name}
-                        </a>
-                    </li>
-                `).join('')}
+                ${episodes.map(ep => {
+                    const isCurrent = ep.name === episodeName ? 'disabled-episode' : ''; // Thêm class nếu là tập hiện tại
+                    return `
+                        <li>
+                            <a href="watching-movie.html?embed=${encodeURIComponent(ep.embed)}&name=${encodeURIComponent(ep.name)}" class="${isCurrent}">
+                                Tập ${ep.name}
+                            </a>
+                        </li>
+                    `;
+                }).join('')}
             </ul>
         </div>
     `;
