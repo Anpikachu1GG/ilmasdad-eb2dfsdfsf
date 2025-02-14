@@ -177,3 +177,46 @@ h1{
 .dropdown-menu button:hover {
     color: var(--secondary-color);
 }
+
+.episode-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    gap: 20px;
+}
+
+.prev-episode, .next-episode {
+    padding: 8px 12px;
+    background-color: #ff5722;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.prev-episode:hover, .next-episode:hover {
+    background-color: #e64a19;
+}
+
+.episode-list li.current-episode {
+    background-color: #ff9800;
+    font-weight: bold;
+}
+
+.episode-list li.current-episode a {
+    color: black;
+}
+.episode-list li.current-episode {
+    background-color: #ff9800;
+    font-weight: bold;
+    color: black;
+    cursor: default; /* Không cho click */
+    pointer-events: none; /* Vô hiệu hóa */
+}
+.episode-list li a.disabled-episode {
+    background-color: #ff9800 !important;
+    font-weight: bold;
+    color: black !important;
+    pointer-events: none; /* Vô hiệu hóa */
+    opacity: 0.6; /* Làm mờ nhẹ để phân biệt */
+    cursor: default;
+}
