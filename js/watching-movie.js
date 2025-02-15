@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
 
+
             // Hàm lấy dữ liệu phim từ film-details.html
             async function fetchMovieDetails(slug) {
                 try {
@@ -45,10 +46,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             let episodes = JSON.parse(sessionStorage.getItem('episodes')) || [];
 
             if (!movieTitle || episodes.length === 0) {
+                sessionStorage.removeItem('movieTitle');
+                sessionStorage.removeItem('movieSlug');
+                sessionStorage.removeItem('episodes');
                 const data = await fetchMovieDetails(movieSlug);
                 movieTitle = data.movieTitle;
                 episodes = data.episodes;
-            }
+            }            
 
             if (movieTitle) {
                 document.title = `${movieTitle} - Tập ${episodeName}`;
