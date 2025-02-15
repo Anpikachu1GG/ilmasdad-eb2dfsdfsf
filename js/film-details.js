@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const params = new URLSearchParams(window.location.search);
-    const movieTitle = localStorage.getItem('movieTitle'); // Lấy tên phim từ localStorage
+    const movieTitle = sessionStorage.getItem('movieTitle'); // Lấy tên phim từ sessionStorage
     const slug = params.get('slug');
     const container = document.getElementById('film-details-container');
 
@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
     if (movieTitle) {
-        document.title = `${movieTitle} - Xem Phim`;
+        document.title = `${movieTitle}`;
     }
 
     try {
@@ -22,10 +22,10 @@ document.addEventListener('DOMContentLoaded', async () => {
             name: item.name
         })) || [];
 
-        localStorage.setItem('genres', JSON.stringify(genres));
-        localStorage.setItem('movieTitle', film.name);
-        localStorage.setItem('movieSlug', film.slug);
-        document.title = `${film.name} - Xem Phim`;
+        sessionStorage.setItem('genres', JSON.stringify(genres));
+        sessionStorage.setItem('movieTitle', film.name);
+        sessionStorage.setItem('movieSlug', film.slug);
+        document.title = `${film.name}`;
 
         container.innerHTML = `
             <img src="${film.thumb_url}" alt="Poster ${film.name}" class="film-image">
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     ${film.episodes?.[0]?.items.length > 0
                         ? film.episodes[0].items.map(episode => `
                             <li>
-                                <a href="watching-movie.html?embed=${encodeURIComponent(episode.embed)}&name=${encodeURIComponent(episode.name)}">
+                                <a href="watching-movie.html?embed=${encodeURIComponent(episode.embed)}&name=${encodeURIComponent(episode.name)}&slug=${film.slug}">
                                     Tập ${episode.name}
                                 </a>
                             </li>
@@ -65,17 +65,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             showMoreButton.addEventListener('click', () => {
                 document.querySelector('.episode-list').innerHTML = film.episodes[0].items.map(episode => `
                     <li>
-                        <a href="watching-movie.html?embed=${encodeURIComponent(episode.embed)}&name=${encodeURIComponent(episode.name)}">
+                        <a href="watching-movie.html?embed=${encodeURIComponent(episode.embed)}&name=${encodeURIComponent(episode.name)}&slug=${film.slug}">
                             Tập ${episode.name}
                         </a>
                     </li>
                 `).join('');
                 showMoreButton.style.display = 'none';
-                window.location.href = `watching-movie.html?embed=${encodeURIComponent(film.episodes[0].items[0].embed)}&name=${encodeURIComponent(film.episodes[0].items[0].name)}`;
+                window.location.href = `watching-movie.html?embed=${encodeURIComponent(film.episodes[0].items[0].embed)}&name=${encodeURIComponent(film.episodes[0].items[0].name)}&slug=${film.slug}`;
             });
         }
         if (film.episodes?.[0]?.items) {
-            localStorage.setItem('episodes', JSON.stringify(film.episodes[0].items));
+            sessionStorage.setItem('episodes', JSON.stringify(film.episodes[0].items));
         }
 
         loadRelatedFilms(genres.map(g => g.slug));
@@ -109,7 +109,7 @@ async function loadRelatedFilms(categorySlugs) {
 
     try {
         const responses = await Promise.all(categorySlugs.map(slug => 
-            axios.get(`https://phim.nguonc.com/api/films/the-loai/${slug}?page=${Math.floor(Math.random() * 50) + 1}`)
+            axios.get(`https://phim.nguonc.com/api/films/the-loai/${slug}?page=${Math.floor(Math.random() * 18) + 1}`)
         ));
 
         const relatedFilms = [...new Map(responses.flatMap(res => res.data.items).map(film => [film.slug, film])).values()].slice(0, 6);
@@ -154,14 +154,14 @@ function toSlug(name) {
 function initThemeToggle() {
     const toggleBtn = document.getElementById('toggle-theme-btn');
     const body = document.body;
-    const theme = localStorage.getItem('theme') || 'dark';
+    const theme = sessionStorage.getItem('theme') || 'dark';
 
     body.classList.toggle('light-theme', theme === 'light');
     toggleBtn.textContent = theme === 'light' ? '🌞' : '🌙';
 
     toggleBtn.addEventListener('click', () => {
         const newTheme = body.classList.toggle('light-theme') ? 'light' : 'dark';
-        localStorage.setItem('theme', newTheme);
+        sessionStorage.setItem('theme', newTheme);
         toggleBtn.textContent = newTheme === 'light' ? '🌞' : '🌙';
     });
 }
