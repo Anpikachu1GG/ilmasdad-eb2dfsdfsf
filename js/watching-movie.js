@@ -49,8 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 localStorage.removeItem('movieTitle');
                 localStorage.removeItem('movieSlug');
                 localStorage.removeItem('episodes');
-                localStorage.removeItem('watchHistory');
-                sessionStorage.removeItem('watchHistory');
+
                 sessionStorage.removeItem('movieTitle');
                 sessionStorage.removeItem('movieSlug');
                 sessionStorage.removeItem('episodes');
