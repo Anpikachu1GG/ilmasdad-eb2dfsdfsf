@@ -46,11 +46,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             let episodes = JSON.parse(sessionStorage.getItem('episodes')) || [];
 
             if (!movieTitle || episodes.length === 0) {
+                localStorage.removeItem('movieTitle');
+                localStorage.removeItem('movieSlug');
+                localStorage.removeItem('episodes');
                 sessionStorage.removeItem('movieTitle');
                 sessionStorage.removeItem('movieSlug');
                 sessionStorage.removeItem('episodes');
                 const data = await fetchMovieDetails(movieSlug);
-                
+                movieTitle = data.movieTitle;
+                episodes = data.episodes;
             }            
 
             if (movieTitle) {
