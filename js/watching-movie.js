@@ -50,8 +50,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 sessionStorage.removeItem('movieSlug');
                 sessionStorage.removeItem('episodes');
                 const data = await fetchMovieDetails(movieSlug);
-                movieTitle = data.movieTitle;
-                episodes = data.episodes;
+                
             }            
 
             if (movieTitle) {
