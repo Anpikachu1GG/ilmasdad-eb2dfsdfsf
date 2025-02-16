@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log(`Không tìm thấy phim "${englishName}", thử lại với "${vietnameseName}"`);
             searchOnNguonc(vietnameseName, '');
         } else {
-            alert('Phim có thể chưa có trên trang.');
+            alert('Phim có thể chưa có trên trang hoặc có tên khác, hãy thử tìm lại bằng tên khác trên thanh tìm kiếm, bạn hãy thử bỏ số phần đi, ví dụ thay vì Shangri-La Frontier 2nd Season, thì hãy thử Shangri-La Frontier.');
         }
     };
 
