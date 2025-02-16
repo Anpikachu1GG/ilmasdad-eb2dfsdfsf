@@ -177,6 +177,13 @@ button {
     margin-top: 20px;
 }
 
+#trending-animes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
 .details-link {
     text-decoration: none; /* Loại bỏ gạch dưới */
     color: var(--secondary-text-color);
@@ -344,5 +351,19 @@ footer a:hover {
 }
 
 .dropdown-menu button:hover {
+    color: var(--secondary-color);
+}
+
+.trending-link {
+    border: none;
+    background-color: white;
+    color: var(--text-color);
+    font-weight: 600;
+    transition: color 0.3s;
+    padding: 5px 15px;
+    text-decoration: none;
+}
+
+.trending-link:hover {
     color: var(--secondary-color);
 }

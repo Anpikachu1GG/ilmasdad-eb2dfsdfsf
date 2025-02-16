@@ -426,3 +426,16 @@ footer p {
 .dropdown-menu button:hover {
     color: var(--secondary-color);
 }
+.trending-link {
+    border: none;
+    background-color: white;
+    color: var(--text-color);
+    font-weight: 600;
+    transition: color 0.3s;
+    padding: 5px 15px;
+    text-decoration: none;
+}
+
+.trending-link:hover {
+    color: var(--secondary-color);
+}
