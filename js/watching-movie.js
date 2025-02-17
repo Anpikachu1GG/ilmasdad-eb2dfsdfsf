@@ -80,20 +80,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('back-to-top')?.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-    initThemeToggle();
 });
-
-function initThemeToggle() {
-    const toggleBtn = document.getElementById('toggle-theme-btn');
-    const body = document.body;
-    const theme = sessionStorage.getItem('theme') || 'dark';
-
-    body.classList.toggle('light-theme', theme === 'light');
-    toggleBtn.textContent = theme === 'light' ? '🌞' : '🌙';
-
-    toggleBtn.addEventListener('click', () => {
-        const newTheme = body.classList.toggle('light-theme') ? 'light' : 'dark';
-        sessionStorage.setItem('theme', newTheme);
-        toggleBtn.textContent = newTheme === 'light' ? '🌞' : '🌙';
-    });
-}

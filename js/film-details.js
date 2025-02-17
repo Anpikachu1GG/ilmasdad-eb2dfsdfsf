@@ -83,8 +83,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('❌ Lỗi khi tải phim:', error);
         container.innerHTML = '<p>Không thể tải thông tin phim. Vui lòng thử lại sau.</p>';
     }
-
-    initThemeToggle();
 });
 
 async function getTmdbRating(originalName) {
@@ -149,19 +147,4 @@ function toSlug(name) {
         .normalize('NFD').replace(/[̀-ͯ]/g, '')
         .replace(/đ/g, 'd').replace(/Đ/g, 'D')
         .replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
-}
-
-function initThemeToggle() {
-    const toggleBtn = document.getElementById('toggle-theme-btn');
-    const body = document.body;
-    const theme = sessionStorage.getItem('theme') || 'dark';
-
-    body.classList.toggle('light-theme', theme === 'light');
-    toggleBtn.textContent = theme === 'light' ? '🌞' : '🌙';
-
-    toggleBtn.addEventListener('click', () => {
-        const newTheme = body.classList.toggle('light-theme') ? 'light' : 'dark';
-        sessionStorage.setItem('theme', newTheme);
-        toggleBtn.textContent = newTheme === 'light' ? '🌞' : '🌙';
-    });
 }
