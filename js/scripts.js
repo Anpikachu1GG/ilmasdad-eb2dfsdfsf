@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggleBtn = document.getElementById('toggle-theme-btn');
     const tmdbApiKey = 'fe149ef5184995f0ce33134201fb0c3d';
 
+    const pageInput = document.getElementById('pageInput');  // Get the page input field
+
     /** 📌 Hàm gọi API lấy danh sách phim **/
     const fetchFilms = async (url) => {
         try {
@@ -43,11 +45,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /** 📌 Hàm tải danh sách phim nhanh hơn **/
     const loadFilms = async (page) => {
-        filmContainer.innerHTML = '<h1 class="not-found">⏳ Đang tải phim...</h1>';
+        filmContainer.innerHTML = '<h1>⏳ Đang tải phim...</h1>';
 
         const films = await fetchFilms(`https://phim.nguonc.com/api/films/phim-moi-cap-nhat?page=${page}`);
         if (!films.length) {
-            filmContainer.innerHTML = '<p class="not-found">⚠️ Không tìm thấy phim nào.</p>';
+            filmContainer.innerHTML = '<p>⚠️ Không tìm thấy phim nào.</p>';
             return;
         }
 
@@ -76,6 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         prevBtns.forEach(btn => btn.disabled = page === 1);
         nextBtns.forEach(btn => btn.disabled = films.length < 10);
+
+        // Set the current page in the page input field
+        if (pageInput) {
+            pageInput.value = currentPage;
+        }
     };
 
     /** 📌 Hàm tìm kiếm phim **/
@@ -87,11 +94,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         isSearching = true;
-        filmContainer.innerHTML = '<p class="not-found">⏳ Đang tìm kiếm...</p>';
+        filmContainer.innerHTML = '<p>⏳ Đang tìm kiếm...</p>';
 
         const films = await fetchFilms(`https://phim.nguonc.com/api/films/search?keyword=${encodeURIComponent(searchKeyword)}&page=${currentPage}`);
         if (!films.length) {
-            filmContainer.innerHTML = '<h1 class="not-found">⚠️ Không tìm thấy kết quả phù hợp.</h1>';
+            filmContainer.innerHTML = '<h1>⚠️ Không tìm thấy kết quả phù hợp.</h1>';
             return;
         }
 
@@ -118,6 +125,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         prevBtns.forEach(btn => btn.disabled = currentPage === 1);
         nextBtns.forEach(btn => btn.disabled = films.length < 10);
+
+        // Update the page input field with the current page
+        if (pageInput) {
+            pageInput.value = currentPage;
+        }
     };
 
     /** 📌 Hàm điều hướng trang **/
@@ -173,4 +185,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     init();
 });
-

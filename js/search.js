@@ -1,14 +1,13 @@
-let currentPage = 1; // Trang hiện tại
-
 document.addEventListener('DOMContentLoaded', () => {
-    // Lấy phần tử DOM
+    // Initial current page
+    let currentPage = 1;
     const searchInput = document.getElementById('search-input');
     const searchButton = document.getElementById('search-button');
     const previousButton = document.getElementById('previous');
     const nextButton = document.getElementById('next');
     const toggleBtn = document.getElementById('toggle-theme-btn');
     const backToTopButton = document.getElementById('back-to-top');
-    const body = document.body;
+    const pageInput = document.getElementById('pageInput'); // Get the page input element
 
     // Xử lý sự kiện tìm kiếm
     function redirectToSearchPage() {
@@ -32,12 +31,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const filmContainer = document.getElementById('film-container');
 
         if (!keyword) {
-            filmContainer.innerHTML = '<p class="not-found">⚠️ Vui lòng nhập từ khóa để tìm kiếm.</p>';
+            filmContainer.innerHTML = '<p>⚠️ Vui lòng nhập từ khóa để tìm kiếm.</p>';
             return;
         }
 
         searchInput.value = keyword; // Hiển thị từ khóa trong ô tìm kiếm
-        filmContainer.innerHTML = '<p class="not-found">⏳ Đang tải kết quả...</p>';
+        filmContainer.innerHTML = '<p>⏳ Đang tải kết quả...</p>';
 
         try {
             const response = await axios.get(`https://phim.nguonc.com/api/films/search?keyword=${encodeURIComponent(keyword)}&page=${page}`);
@@ -47,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             filmContainer.innerHTML = ''; // Xóa nội dung cũ
 
             if (films.length === 0) {
-                filmContainer.innerHTML = '<p class="not-found">⚠️ Không tìm thấy phim nào phù hợp.</p>';
+                filmContainer.innerHTML = '<p>⚠️ Không tìm thấy phim nào phù hợp.</p>';
                 return;
             }
 
@@ -70,6 +69,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // Cập nhật trạng thái phân trang
             previousButton.disabled = page === 1;
             nextButton.disabled = films.length < 10; // Giả sử mỗi trang có 10 phim
+
+            // Set the current page in the page input field
+            if (pageInput) {
+                pageInput.value = currentPage;
+            }
 
         } catch (error) {
             console.error('❌ Lỗi khi tìm kiếm phim:', error);

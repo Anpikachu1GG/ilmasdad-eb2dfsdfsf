@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phim Mới</title>
+    <title>Phim Trending</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="css/film-details.css">
+    <link rel="stylesheet" href="css/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
-<body><div class="content-wrapper">
+<body>
+    <div class="content-wrapper">
     <!-- Thanh điều hướng -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
@@ -35,7 +36,7 @@
                         <ul class="dropdown-menu" aria-labelledby="categoryDropdown" id="genre-dropdown-menu">
                             <!-- Các nút thể loại sẽ được tạo động ở đây -->
                         </ul>
-                    </li>
+                    </li>                                                          
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="categoryDropdown" role="button" data-bs-toggle="dropdown">Danh Mục</a>
                         <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
@@ -127,43 +128,64 @@
             </button>
                 </div>
             </nav>
-            <main>
-                <section class="film-details">
-                    <div id="film-details-container">
-                        <!-- Thông tin chi tiết phim và danh mục sẽ hiển thị ở đây -->
+                <main class="container mt-4">
+                    <div id="sort-options" class="container mt-4">
+                        <div class="d-flex align-items-center flex-wrap gap-3 mb-4">
+                            <h1 class="mb-0">Sắp Xếp Theo:</h1>
+                            <div class="btn-group d-flex flex-wrap justify-content-start" data-toggle="buttons">
+                                <button class="btn btn-outline-primary sort-button" data-sort="TITLE_ROMAJI">Tên</button>
+                                <button class="btn btn-outline-primary sort-button" data-sort="POPULARITY_DESC">Độ phổ biến</button>
+                                <button class="btn btn-outline-primary sort-button" data-sort="SCORE_DESC">Điểm trung bình</button>
+                                <button class="btn btn-outline-primary sort-button" data-sort="TRENDING_DESC">Xu hướng</button>
+                                <button class="btn btn-outline-primary sort-button" data-sort="FAVOURITES_DESC">Yêu thích</button>
+                                <button class="btn btn-outline-primary sort-button" data-sort="START_DATE_DESC">Ngày phát hành</button>
+                            </div>
+                        </div>                        
+                    </div>                      
+                    <h1 class="text-center mb-4"> Danh sách phim</h1>
+                    <div id="pagination" class="d-flex justify-content-center my-3">
+                        <button id="previous" class="btn btn-danger me-2">Trang Trước</button>
+                        <input type="number" id="pageInput" class="form-control w-auto" min="1" placeholder="Đang ở trang 1">
+                        <button id="goToPage" class="btn btn-primary ms-2">Đi</button>
+                        <button id="next" class="btn btn-danger ms-2">Trang Tiếp Theo</button>
                     </div>
-                </section>
-                <div id="related-films" class="related-films"></div>
-                <!-- Nút quay về đầu trang -->
-                <button id="back-to-top" class="btn btn-secondary position-fixed bottom-0 end-0 m-3">Quay về đầu trang</button>
-            </main>
-
-                <script>
-                function redirectToTrending(type, timeframe) {
-                    window.location.href = `trending.html?type=${type}&timeframe=${timeframe}`;
-                }
-                </script>
-                <script>
-                    function navigateToCategory(category, slug) {
-                        const newUrl = `genres.html?category=${category}&slug=${slug}`;
-                        window.location.href = newUrl;
-                
-                        if (typeof FilmApp !== 'undefined' && FilmApp.loadFilmsByCategory) {
-                            FilmApp.loadFilmsByCategory(category, slug);
-                        } else {
-                            console.error("⚠️ FilmApp chưa được định nghĩa hoặc loadFilmsByCategory không tồn tại.");
-                        }
+                    <h1 class="text-center mb-4"> Danh sách dưới chỉ để tham khảo, để đọc thêm về nội dung phim hay xem phim hãy bấm vào nút tìm kiếm</h1>
+                    <ul id="anime-genres">
+                        <!-- Danh sách phim sẽ được chèn vào đây -->
+                    </ul>
+                    <div id="pagination-bottom" class="d-flex justify-content-center my-3">
+                        <button id="previous-bottom" class="btn btn-danger me-2">Trang Trước</button>
+                        <input type="number" id="pageInput-bottom" class="form-control w-auto" min="1" placeholder="Đang ở trang 1">
+                        <button id="goToPage-bottom" class="btn btn-primary ms-2">Đi</button>
+                        <button id="next-bottom" class="btn btn-danger ms-2">Trang Tiếp Theo</button>
+                    </div>
+                    <button id="back-to-top" class="btn btn-secondary position-fixed bottom-0 end-0 m-3">Quay về đầu trang</button>
+                </main>
+                    <script>
+                    function redirectToTrending(type, timeframe) {
+                        window.location.href = `trending.html?type=${type}&timeframe=${timeframe}`;
                     }
-                </script>                
-
+                    </script>
+                    <script>
+                        function navigateToCategory(category, slug) {
+                            const newUrl = `genres.html?category=${category}&slug=${slug}`;
+                            window.location.href = newUrl;
+                    
+                            if (typeof FilmApp !== 'undefined' && FilmApp.loadFilmsByCategory) {
+                                FilmApp.loadFilmsByCategory(category, slug);
+                            } else {
+                                console.error("⚠️ FilmApp chưa được định nghĩa hoặc loadFilmsByCategory không tồn tại.");
+                            }
+                        }
+                    </script>
     <footer class="text-center py-3 bg-dark text-light">
         <p>&copy; 2025 Phim Mới. Tất cả quyền lợi được bảo lưu.</p>
         <p>Liên hệ: phimhayvclvcl@gmail.com</p>
     </footer>
 </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/film-details.js" defer></script>
-    <script src="js/anime-genres.js"></script>
-    <script src="js/search.js"></script>
+    <script src="js/scripts.js" defer></script>
+    <script src="js/anime-genres.js" defer></script>
+    <script src="js/search.js" defer></script>
 </body>
 </html>

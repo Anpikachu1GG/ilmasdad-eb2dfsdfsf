@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         prevBtns: document.querySelectorAll('#previous, #previous-bottom'),
         nextBtns: document.querySelectorAll('#next, #next-bottom'),
         goToPageBtns: document.querySelectorAll('#goToPage, #goToPage-bottom'),
-        pageInput: document.getElementById('pageInput'),
+        pageInputs: document.querySelectorAll('#pageInput, #pageInput-bottom')
     };
 
     const fetchAniListTrending = async (page = 1) => {
@@ -14,14 +14,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 Page(page: $page, perPage: $perPage) {
                     media(sort: TRENDING_DESC, type: ANIME) {
                         id
-                        title {
-                            romaji
-                            english
-                            native
-                        }
-                        coverImage {
-                            large
-                        }
+                        title { romaji english native }
+                        coverImage { large }
                         episodes
                         averageScore
                         description
@@ -29,7 +23,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             }
         `;
-
         const variables = { page, perPage: 12 };
 
         try {
@@ -39,66 +32,85 @@ document.addEventListener('DOMContentLoaded', async () => {
                 body: JSON.stringify({ query, variables })
             });
             const data = await response.json();
-            return data.data.Page.media;
+            return data?.data?.Page?.media || [];
         } catch (error) {
             console.error("Lỗi khi lấy danh sách trending từ AniList API:", error);
             return [];
         }
     };
 
-    const searchOnNguonc = async (englishName, vietnameseName) => {
-        const keyword = englishName || vietnameseName;
+    const searchOnNguonc = async (englishName, romajiName) => {
+        const keyword = englishName || romajiName;
         if (!keyword) return alert('Không tìm thấy tên anime để tìm kiếm.');
 
-        const data = await fetch(`https://phim.nguonc.com/api/films/search?keyword=${encodeURIComponent(keyword)}`)
-            .then(res => res.json())
-            .catch(() => null);
+        try {
+            const response = await fetch(`https://phim.nguonc.com/api/films/search?keyword=${encodeURIComponent(keyword)}`);
+            const data = await response.json();
 
-        if (data?.items?.length) {
-            window.location.href = `search.html?keyword=${encodeURIComponent(keyword)}`;
-        } else if (englishName && vietnameseName) {
-            console.log(`Không tìm thấy anime "${englishName}", thử lại với "${vietnameseName}"`);
-            searchOnNguonc(vietnameseName, '');
-        } else {
-            alert('Anime có thể chưa có trên trang hoặc có tên khác, hãy thử tìm lại bằng tên khác trên thanh tìm kiếm, bạn hãy thử bỏ số phần đi, ví dụ thay vì Shangri-La Frontier 2nd Season, thì hãy thử Shangri-La Frontier.');
+            if (data?.items?.length) {
+                window.location.href = `search.html?keyword=${encodeURIComponent(keyword)}`;
+            } else if (englishName && romajiName) {
+                console.log(`Không tìm thấy "${englishName}", thử lại với "${romajiName}"`);
+                searchOnNguonc(romajiName, '');
+            } else {
+                alert('Anime có thể chưa có trên trang hoặc có tên khác. Hãy thử tìm lại với từ khóa đơn giản hơn.');
+            }
+        } catch {
+            alert('Lỗi kết nối, vui lòng thử lại.');
         }
     };
 
     const displayAnime = async (animeList) => {
-        elements.filmContainer.innerHTML = animeList.length ? '' : '<p>Không tìm thấy anime nào.</p>';
-        
+        elements.filmContainer.innerHTML = "<p>Đang tải...</p>";
+
+        if (!animeList.length) {
+            elements.filmContainer.innerHTML = "<p>Không tìm thấy anime nào.</p>";
+            return;
+        }
+
+        const fragment = document.createDocumentFragment();
+
         animeList.forEach(anime => {
-            const animeCard = document.createElement('div');
-            animeCard.className = 'film-card';
-            animeCard.innerHTML = `
-                <a class='details-link'>
-                    <img src='${anime.coverImage.large}' alt='${anime.title.romaji}' class='film-image'>
+            const card = document.createElement("div");
+            card.className = "film-card";
+            card.innerHTML = `
+                <a class="details-link">
+                    <img src="${anime.coverImage.large}" alt="${anime.title.romaji}" class="film-image" loading="lazy">
                     <h2>${anime.title.romaji}</h2>
                     <p><strong>Tổng số tập:</strong> ${anime.episodes || 'Chưa rõ'}</p>
                     <p><strong>Điểm đánh giá:</strong> ⭐ ${anime.averageScore || 'N/A'}/100</p>
-                    <div class='film-overview'>${anime.description || 'Không có mô tả.'}</div>
+                    <div class="film-overview">${anime.description || 'Không có mô tả.'}</div>
                 </a>
-                <button class='search-nguonc-button'>Tìm kiếm</button>
+                <button class="search-nguonc-button">Tìm kiếm</button>
             `;
 
-            animeCard.querySelector('.search-nguonc-button').addEventListener('click', () => 
+            card.querySelector(".search-nguonc-button").addEventListener("click", () => 
                 searchOnNguonc(anime.title.english, anime.title.romaji));
 
-            const overview = animeCard.querySelector('.film-overview');
-            overview.style.display = '-webkit-box';
-            overview.style.webkitBoxOrient = 'vertical';
-            overview.style.webkitLineClamp = '19';
-            overview.style.overflow = 'hidden';
+            const overview = card.querySelector(".film-overview");
+            overview.style.display = "-webkit-box";
+            overview.style.webkitBoxOrient = "vertical";
+            overview.style.webkitLineClamp = "19";
+            overview.style.overflow = "hidden";
 
-            elements.filmContainer.appendChild(animeCard);
+            fragment.appendChild(card);
         });
+
+        elements.filmContainer.innerHTML = "";
+        elements.filmContainer.appendChild(fragment);
+    };
+
+    const updatePaginationControls = (filmCount) => {
+        elements.prevBtns.forEach(btn => btn.disabled = currentPage === 1);
+        elements.nextBtns.forEach(btn => btn.disabled = filmCount < 12);
+        elements.pageInputs.forEach(input => input.value = currentPage);
     };
 
     const handlePagination = async (action) => {
         if (action === 'next') currentPage++;
         else if (action === 'prev' && currentPage > 1) currentPage--;
         else if (action === 'goTo') {
-            const targetPage = parseInt(elements.pageInput.value);
+            const targetPage = parseInt(elements.pageInputs[0].value);
             if (!isNaN(targetPage) && targetPage >= 1) currentPage = targetPage;
             else return alert('⚠️ Vui lòng nhập số trang hợp lệ!');
         }
@@ -108,11 +120,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const loadTrending = async () => {
         const trendingAnime = await fetchAniListTrending(currentPage);
         await displayAnime(trendingAnime);
+        updatePaginationControls(trendingAnime.length);
     };
 
-    elements.prevBtns.forEach(btn => btn.addEventListener('click', () => handlePagination('prev')));
-    elements.nextBtns.forEach(btn => btn.addEventListener('click', () => handlePagination('next')));
-    elements.goToPageBtns.forEach(btn => btn.addEventListener('click', () => handlePagination('goTo')));
+    elements.prevBtns.forEach(btn => btn.addEventListener("click", () => handlePagination("prev")));
+    elements.nextBtns.forEach(btn => btn.addEventListener("click", () => handlePagination("next")));
+    elements.goToPageBtns.forEach(btn => btn.addEventListener("click", () => handlePagination("goTo")));
 
     await loadTrending();
 });

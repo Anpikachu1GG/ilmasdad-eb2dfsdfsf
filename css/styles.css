@@ -126,6 +126,8 @@ body, .content-wrapper {
 /* Nút bấm */
 button {
     border-radius: 5px;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Phân trang */
@@ -177,9 +179,16 @@ button {
     margin-top: 20px;
 }
 
-#trending-animes {
+#anime-genres {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+#trending-animes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 15px;
     margin-top: 20px;
 }
@@ -215,6 +224,7 @@ button {
     height: 400px;
     object-fit: cover;
 }
+
 .film-card .card-body {
     padding: 10px;
 }
@@ -366,4 +376,51 @@ footer a:hover {
 
 .trending-link:hover {
     color: var(--secondary-color);
+}
+
+#sort-options {
+    display: flex;
+    flex-wrap: nowrap; /* Không cho phép wrap, giữ tất cả trong một hàng */
+    align-items: center;
+    justify-content: center;
+    gap: 15px; /* Khoảng cách giữa các phần tử */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+h1.mb-0 {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+    color: var(--secondary-text-color);
+    margin-right: 20px; /* Khoảng cách giữa tiêu đề và các nút */
+}
+
+.sort-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: nowrap; /* Các nút sắp xếp vẫn nằm trên cùng một hàng */
+    justify-content: flex-start;
+}
+
+.sort-button {
+    padding: 12px 25px;
+    font-size: 16px;
+    font-weight: 500;
+    border: 2px solid #007BFF;
+    background-color: #fff;
+    color: #007BFF;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.sort-button:hover {
+    background-color: #007BFF;
+    color: #fff;
+}
+
+.sort-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
 }

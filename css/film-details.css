@@ -113,6 +113,8 @@ body, .content-wrapper {
 /* Nút bấm */
 button {
     border-radius: 5px;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Chi tiết phim */
@@ -426,6 +428,7 @@ footer p {
 .dropdown-menu button:hover {
     color: var(--secondary-color);
 }
+
 .trending-link {
     border: none;
     background-color: white;

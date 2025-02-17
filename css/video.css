@@ -165,6 +165,13 @@ h1{
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Hiệu ứng đổ bóng */
 }
 
+/* Nút bấm */
+button {
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
 .dropdown-menu button {
     border: none;
     background-color: white;

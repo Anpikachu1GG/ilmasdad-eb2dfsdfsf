@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     let currentPage = 1;
     const tmdbApiKey = 'fe149ef5184995f0ce33134201fb0c3d';
     const urlParams = new URLSearchParams(window.location.search);
-    let currentType = urlParams.get('type') || 'movie'; // Mặc định là phim lẻ
-    let currentTimeframe = urlParams.get('timeframe') || 'day'; // Mặc định theo ngày
+    let currentType = urlParams.get('type') || 'movie'; // Default is 'movie'
+    let currentTimeframe = urlParams.get('timeframe') || 'day'; // Default is 'day'
 
     document.getElementById('trending-films').innerText = `Danh sách ${currentType === 'movie' ? 'phim lẻ' : 'TV Series'} (${currentTimeframe})`;
 
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         pageInput: document.getElementById('pageInput'),
     };
 
-    // Hàm gọi API JSON với xử lý lỗi
+    // API request function with error handling
     const fetchJSON = async (url) => {
         try {
             const response = await fetch(url);
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
-    // Hàm lấy chi tiết phim/tv show
+    // Fetch movie/TV show details
     const fetchDetails = async (id) => {
         try {
             const [vnData, enData, creditsData] = await Promise.all([
@@ -53,27 +53,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
-    // Hàm gọi API trending
+    // Fetch trending list
     const fetchTrending = async (page = 1) =>
         fetchJSON(`https://api.themoviedb.org/3/trending/${currentType}/${currentTimeframe}?api_key=${tmdbApiKey}&language=vi-VN&page=${page}`);
 
-    // Hàm tìm kiếm trên `nguonc.com`
-    const searchOnNguonc = async (englishName, vietnameseName) => {
-        const keyword = englishName || vietnameseName;
-        if (!keyword) return alert('Không tìm thấy tên phim để tìm kiếm.');
-
-        const data = await fetchJSON(`https://phim.nguonc.com/api/films/search?keyword=${encodeURIComponent(keyword)}`);
-        if (data?.items?.length) {
-            window.location.href = `search.html?keyword=${encodeURIComponent(keyword)}`;
-        } else if (englishName && vietnameseName) {
-            console.log(`Không tìm thấy phim "${englishName}", thử lại với "${vietnameseName}"`);
-            searchOnNguonc(vietnameseName, '');
-        } else {
-            alert('Phim có thể chưa có trên trang hoặc có tên khác, hãy thử tìm lại bằng tên khác trên thanh tìm kiếm, bạn hãy thử bỏ số phần đi, ví dụ thay vì Shangri-La Frontier 2nd Season, thì hãy thử Shangri-La Frontier.');
-        }
-    };
-
-    // Hiển thị danh sách phim
+    // Display movies
     const displayMovies = async (movies) => {
         elements.filmContainer.innerHTML = movies.length ? '' : '<p>Không tìm thấy phim nào.</p>';
         const detailsList = await Promise.all(movies.map(movie => fetchDetails(movie.id)));
@@ -102,15 +86,29 @@ document.addEventListener('DOMContentLoaded', async () => {
                 filmCard.querySelector('.film-overview').classList.add('hidden');
             });
 
+            const overview = filmCard.querySelector('.film-overview');
+            overview.style.display = '-webkit-box';
+            overview.style.webkitBoxOrient = 'vertical';
+            overview.style.webkitLineClamp = '19';
+            overview.style.overflow = 'hidden';
+
             filmCard.querySelector('.search-nguonc-button').addEventListener('click', () => searchOnNguonc(details.nameEN, details.nameVN));
             elements.filmContainer.appendChild(filmCard);
         });
 
         elements.prevBtns.forEach(btn => btn.disabled = currentPage === 1);
         elements.nextBtns.forEach(btn => btn.disabled = movies.length < 10);
+
+        // Update page input value
+        if (elements.pageInput) {
+            elements.pageInput.value = currentPage;
+        }
+        
+        const pageInputs = document.querySelectorAll('#pageInput, #pageInput-bottom');
+        pageInputs.forEach(input => input.value = currentPage);        
     };
 
-    // Xử lý phân trang
+    // Handle pagination
     const handlePagination = async (action) => {
         if (action === 'next') currentPage++;
         else if (action === 'prev' && currentPage > 1) currentPage--;
@@ -122,18 +120,33 @@ document.addEventListener('DOMContentLoaded', async () => {
         await loadTrending();
     };
 
-    // Tải danh sách phim
+    // Load trending films
     const loadTrending = async () => {
         const trending = await fetchTrending(currentPage);
         await displayMovies(trending?.results || []);
     };
 
-    // Gán sự kiện cho nút
+    // Hàm tìm kiếm trên `nguonc.com`
+    const searchOnNguonc = async (englishName, vietnameseName) => {
+        const keyword = englishName || vietnameseName;
+        if (!keyword) return alert('Không tìm thấy tên phim để tìm kiếm.');
+        const data = await fetchJSON(`https://phim.nguonc.com/api/films/search?keyword=${encodeURIComponent(keyword)}`);
+        if (data?.items?.length) {
+            window.location.href = `search.html?keyword=${encodeURIComponent(keyword)}`;
+        } else if (englishName && vietnameseName) {
+            console.log(`Không tìm thấy phim "${englishName}", thử lại với "${vietnameseName}"`);
+            searchOnNguonc(vietnameseName, '');
+        } else {
+            alert('Phim có thể chưa có trên trang hoặc có tên khác, hãy thử tìm lại bằng tên khác trên thanh tìm kiếm, bạn hãy thử bỏ số phần đi, ví dụ thay vì Shangri-La Frontier 2nd Season, thì hãy thử Shangri-La Frontier.');
+        }
+    };
+
+    // Event listeners for pagination buttons
     elements.prevBtns.forEach(btn => btn.addEventListener('click', () => handlePagination('prev')));
     elements.nextBtns.forEach(btn => btn.addEventListener('click', () => handlePagination('next')));
     elements.goToPageBtns.forEach(btn => btn.addEventListener('click', () => handlePagination('goTo')));
     elements.backToTop?.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-    // Tải phim ngay khi vào trang
+    // Load trending films on page load
     await loadTrending();
 });

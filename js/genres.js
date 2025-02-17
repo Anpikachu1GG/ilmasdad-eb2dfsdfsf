@@ -1,4 +1,4 @@
-const FilmApp = {
+window.FilmApp = {
     currentPage: 1,
     tmdbApiKey: "fe149ef5184995f0ce33134201fb0c3d",
 
@@ -64,6 +64,7 @@ const FilmApp = {
     async loadFilmsByCategory(category, slug) {
         const films = await this.fetchMovies(category, slug, this.currentPage);
         this.renderFilms(films);
+        this.updatePaginationControls(films.length);
     },
 
     // Xử lý tìm kiếm phim
@@ -77,6 +78,17 @@ const FilmApp = {
         } catch (error) {
             console.error("Lỗi tìm kiếm phim:", error);
         }
+    },
+
+    // Cập nhật điều khiển phân trang
+    updatePaginationControls(filmCount) {
+        const prevBtns = document.querySelectorAll('#previous, #previous-bottom');
+        const nextBtns = document.querySelectorAll('#next, #next-bottom');
+        const pageInput = document.querySelector("#pageInput, #pageInput-bottom");
+
+        prevBtns.forEach(btn => btn.disabled = this.currentPage === 1);
+        nextBtns.forEach(btn => btn.disabled = filmCount < 12);
+        pageInput.value = this.currentPage;
     },
 
     // Xử lý phân trang
@@ -106,10 +118,10 @@ const FilmApp = {
         const category = this.getQueryParam("category") || "the-loai";
         const slug = this.getQueryParam("slug");
         if (slug) this.loadFilmsByCategory(category, slug);
-        
+
         this.setupPagination();
     },
 };
 
 // Chạy ứng dụng khi tải trang
-document.addEventListener("DOMContentLoaded", () => FilmApp.init());
+document.addEventListener("DOMContentLoaded", () => window.FilmApp.init());
