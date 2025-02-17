@@ -153,7 +153,7 @@ const FilmApp = {
             });
 
             const { data } = await response.json();
-            this.genres = data?.GenreCollection || [];
+            this.genres = (data?.GenreCollection || []).filter(genre => genre !== "Hentai");
 
             const genreDropdownMenu = document.getElementById("genre-dropdown-menu");
             if (genreDropdownMenu) {
