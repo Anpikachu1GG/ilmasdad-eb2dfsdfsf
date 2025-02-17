@@ -94,12 +94,54 @@ const FilmApp = {
                 <p><strong>Điểm đánh giá:</strong> ⭐ ${anime.averageScore || 'N/A'}/100</p>
                 <p><strong>Trạng thái:</strong> ${status}</p>
                 <p><strong>Thể loại:</strong> ${anime.genres.join(', ') || 'Chưa có'}</p>
-                <div class="film-overview">${anime.description || 'Không có mô tả.'}</div>
+                <div class="film-overview hidden">${anime.description || 'Không có mô tả.'}</div>
             </a>
             <button class="search-nguonc-button" data-title="${anime.title.english || anime.title.romaji}">Tìm kiếm</button>
         `;
     },
+    
+    async renderAnimes(animes) {
+        const container = document.getElementById("anime-genres");
+        if (!container) return console.error("Không tìm thấy phần tử 'anime-genres'");
+    
+        container.innerHTML = "<p>Đang tải...</p>";
+    
+        if (animes.length === 0) {
+            container.innerHTML = "<p>Không tìm thấy anime nào.</p>";
+            return;
+        }
+    
+        const fragment = document.createDocumentFragment();
+        animes.forEach(anime => {
+            const card = document.createElement("li");
+            card.classList.add("film-card");
+            card.innerHTML = this.createAnimeCard(anime);
+    
+            // Gán sự kiện hover để hiển thị mô tả
+            const overview = card.querySelector(".film-overview");
+            card.addEventListener("mouseenter", () => overview.classList.remove("hidden"));
+            card.addEventListener("mouseleave", () => overview.classList.add("hidden"));
+    
+            // Áp dụng giới hạn cho mô tả
+            overview.style.display = "-webkit-box";
+            overview.style.webkitBoxOrient = "vertical";
+            overview.style.webkitLineClamp = "19";  // Giới hạn mô tả ở 5 dòng
+            overview.style.overflow = "hidden";
+    
+            fragment.appendChild(card);
+        });
+    
+        container.innerHTML = "";
+        container.appendChild(fragment);
+    
+        document.querySelectorAll(".search-nguonc-button").forEach(button =>
+            button.addEventListener("click", () => this.searchOnNguonc(button.dataset.title))
+        );
+    
+        this.updatePaginationControls(animes.length);
+    },    
 
+    
     updatePaginationControls(filmCount) {
         ["previous", "next", "previous-bottom", "next-bottom"].forEach(id => {
             const btn = document.getElementById(id);
@@ -111,6 +153,7 @@ const FilmApp = {
             if (input) input.value = this.currentPage;
         });
     },
+
 
     async searchOnNguonc(title) {
         if (!title) return alert('Không tìm thấy tên anime để tìm kiếm.');
