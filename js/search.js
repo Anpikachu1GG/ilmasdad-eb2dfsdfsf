@@ -5,9 +5,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchButton = document.getElementById('search-button');
     const previousButton = document.getElementById('previous');
     const nextButton = document.getElementById('next');
-    const toggleBtn = document.getElementById('toggle-theme-btn');
     const backToTopButton = document.getElementById('back-to-top');
     const pageInput = document.getElementById('pageInput'); // Get the page input element
+
+    const toggleBtn = document.getElementById('toggle-theme-btn');
+    const body = document.body;
+    
+    if (localStorage.getItem('theme') === 'light') {
+        body.classList.add('light-theme');
+        toggleBtn.textContent = '🌞';
+    }
+    
+    toggleBtn.addEventListener('click', () => {
+        body.classList.toggle('light-theme');
+        toggleBtn.textContent = body.classList.contains('light-theme') ? '🌞' : '🌙';
+        localStorage.setItem('theme', body.classList.contains('light-theme') ? 'light' : 'dark');
+    });
 
     // Xử lý sự kiện tìm kiếm
     function redirectToSearchPage() {
@@ -88,23 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         loadSearchResults(currentPage);
     }
-
-    // 🌞 Bật/tắt chế độ sáng/tối
-    document.addEventListener('DOMContentLoaded', () => {
-        const toggleBtn = document.getElementById('toggle-theme-btn');
-        const body = document.body;
-    
-        if (localStorage.getItem('theme') === 'light') {
-            body.classList.add('light-theme');
-            toggleBtn.textContent = '🌞';
-        }
-    
-        toggleBtn.addEventListener('click', () => {
-            body.classList.toggle('light-theme');
-            toggleBtn.textContent = body.classList.contains('light-theme') ? '🌞' : '🌙';
-            localStorage.setItem('theme', body.classList.contains('light-theme') ? 'light' : 'dark');
-        });
-    });
 
     // 🔝 Xử lý nút "Quay về đầu trang"
     if (backToTopButton) {
