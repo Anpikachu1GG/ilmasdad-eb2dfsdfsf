@@ -47,6 +47,7 @@ const FilmApp = {
             });
 
             const { data } = await response.json();
+            this.totalFilmCount = data?.Page?.media.length || 0; // Cập nhật tổng số lượng phim
             return data?.Page?.media || [];
         } catch (error) {
             console.error("Lỗi khi lấy danh sách anime:", error);
@@ -70,17 +71,28 @@ const FilmApp = {
             const card = document.createElement("li");
             card.classList.add("film-card");
             card.innerHTML = this.createAnimeCard(anime);
+
+            // Gán sự kiện hover để hiển thị mô tả
+            const overview = card.querySelector(".film-overview");
+            card.addEventListener("mouseenter", () => overview.classList.remove("hidden"));
+            card.addEventListener("mouseleave", () => overview.classList.add("hidden"));
+
+            // Áp dụng giới hạn cho mô tả
+            overview.style.display = "-webkit-box";
+            overview.style.webkitBoxOrient = "vertical";
+            overview.style.webkitLineClamp = "19";  // Giới hạn mô tả ở 5 dòng
+            overview.style.overflow = "hidden";
+
             fragment.appendChild(card);
         });
 
         container.innerHTML = "";
         container.appendChild(fragment);
 
-        document.querySelectorAll(".search-nguonc-button").forEach(button => 
+        document.querySelectorAll(".search-nguonc-button").forEach(button =>
             button.addEventListener("click", () => this.searchOnNguonc(button.dataset.title))
         );
 
-        this.updateDescriptionCSS();
         this.updatePaginationControls(animes.length);
     },
 
@@ -99,61 +111,46 @@ const FilmApp = {
             <button class="search-nguonc-button" data-title="${anime.title.english || anime.title.romaji}">Tìm kiếm</button>
         `;
     },
-    
-    async renderAnimes(animes) {
-        const container = document.getElementById("anime-genres");
-        if (!container) return console.error("Không tìm thấy phần tử 'anime-genres'");
-    
-        container.innerHTML = "<p>Đang tải...</p>";
-    
-        if (animes.length === 0) {
-            container.innerHTML = "<p>Không tìm thấy anime nào.</p>";
-            return;
-        }
-    
-        const fragment = document.createDocumentFragment();
-        animes.forEach(anime => {
-            const card = document.createElement("li");
-            card.classList.add("film-card");
-            card.innerHTML = this.createAnimeCard(anime);
-    
-            // Gán sự kiện hover để hiển thị mô tả
-            const overview = card.querySelector(".film-overview");
-            card.addEventListener("mouseenter", () => overview.classList.remove("hidden"));
-            card.addEventListener("mouseleave", () => overview.classList.add("hidden"));
-    
-            // Áp dụng giới hạn cho mô tả
-            overview.style.display = "-webkit-box";
-            overview.style.webkitBoxOrient = "vertical";
-            overview.style.webkitLineClamp = "19";  // Giới hạn mô tả ở 5 dòng
-            overview.style.overflow = "hidden";
-    
-            fragment.appendChild(card);
-        });
-    
-        container.innerHTML = "";
-        container.appendChild(fragment);
-    
-        document.querySelectorAll(".search-nguonc-button").forEach(button =>
-            button.addEventListener("click", () => this.searchOnNguonc(button.dataset.title))
-        );
-    
-        this.updatePaginationControls(animes.length);
-    },    
 
-    
     updatePaginationControls(filmCount) {
-        ["previous", "next", "previous-bottom", "next-bottom"].forEach(id => {
-            const btn = document.getElementById(id);
-            if (btn) btn.disabled = (id.includes("previous") && this.currentPage === 1) || (id.includes("next") && filmCount < 12);
-        });
+        const previousButtons = document.querySelectorAll("#previous, #previous-bottom");
+        const nextButtons = document.querySelectorAll("#next, #next-bottom");
+        const pageInputs = document.querySelectorAll("#pageInput, #pageInput-bottom");
 
-        ["pageInput", "pageInput-bottom"].forEach(id => {
-            const input = document.getElementById(id);
-            if (input) input.value = this.currentPage;
-        });
+        previousButtons.forEach(btn => btn.disabled = this.currentPage === 1);
+        nextButtons.forEach(btn => btn.disabled = filmCount < 12);
+        pageInputs.forEach(input => input.value = this.currentPage);
     },
 
+    handlePagination(action) {
+        if (action === 'next') {
+            this.currentPage++;
+        } else if (action === 'prev' && this.currentPage > 1) {
+            this.currentPage--;
+        } else if (action === 'goTo') {
+            const targetPage = parseInt(document.querySelector("#pageInput").value);
+            if (!isNaN(targetPage) && targetPage >= 1) {
+                this.currentPage = targetPage;
+            } else {
+                alert('⚠️ Vui lòng nhập số trang hợp lệ!');
+                return;
+            }
+        }
+        this.loadAnimeByGenre();
+    },
+
+    loadAnimeByGenre() {
+        const genre = this.getQueryParam("genre");
+        if (!genre) return;
+
+        document.getElementById("anime-genres").innerHTML = "<p>Đang tải...</p>";
+
+        this.fetchAnimeByGenre(genre, this.currentPage)
+            .then(animes => {
+                this.renderAnimes(animes);
+                this.updatePaginationControls(animes.length);
+            });
+    },
 
     async searchOnNguonc(title) {
         if (!title) return alert('Không tìm thấy tên anime để tìm kiếm.');
@@ -173,16 +170,6 @@ const FilmApp = {
 
     getQueryParam(name) {
         return new URLSearchParams(window.location.search).get(name);
-    },
-
-    async loadAnimeByGenre() {
-        const genre = this.getQueryParam("genre");
-        if (!genre) return;
-
-        document.getElementById("anime-genres").innerHTML = "<p>Đang tải...</p>";
-
-        const animes = await this.fetchAnimeByGenre(genre);
-        this.renderAnimes(animes);
     },
 
     async loadGenres() {
@@ -224,6 +211,14 @@ const FilmApp = {
                 this.updateSort(event.target.dataset.sort);
             }
         });
+
+        // Initialize pagination buttons with the new functions
+        document.getElementById("previous").addEventListener("click", () => this.handlePagination('prev'));
+        document.getElementById("next").addEventListener("click", () => this.handlePagination('next'));
+        document.getElementById("goToPage").addEventListener("click", () => this.handlePagination('goTo'));
+        document.getElementById("previous-bottom").addEventListener("click", () => this.handlePagination('prev'));
+        document.getElementById("next-bottom").addEventListener("click", () => this.handlePagination('next'));
+        document.getElementById("goToPage-bottom").addEventListener("click", () => this.handlePagination('goTo'));
     }
 };
 
