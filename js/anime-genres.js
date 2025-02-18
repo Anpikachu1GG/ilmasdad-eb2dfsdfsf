@@ -100,15 +100,15 @@ const FilmApp = {
         const status = this.statusTranslations.get(anime.status) || anime.status;
         return `
             <a class="details-link">
-                <img src="${anime.coverImage.large}" alt="${anime.title.romaji}" class="film-image" loading="lazy">
-                <h2>${anime.title.romaji}</h2>
+                <img src="${anime.coverImage.large}" alt="${anime.title.english}" class="film-image" loading="lazy">
+                <h2>${anime.title?.english || anime.title?.romaji}</h2>
                 <p><strong>Tổng số tập:</strong> ${anime.episodes || 'Chưa rõ'}</p>
                 <p><strong>Điểm đánh giá:</strong> ⭐ ${anime.averageScore || 'N/A'}/100</p>
                 <p><strong>Trạng thái:</strong> ${status}</p>
                 <p><strong>Thể loại:</strong> ${anime.genres.join(', ') || 'Chưa có'}</p>
                 <div class="film-overview hidden">${anime.description || 'Không có mô tả.'}</div>
             </a>
-            <button class="search-nguonc-button" data-title="${anime.title.english || anime.title.romaji}">Tìm kiếm</button>
+            <button class="search-nguonc-button" data-title="${anime.title?.romaji || anime.title?.english || 'Không rõ'}">Tìm kiếm</button>
         `;
     },
 
@@ -225,5 +225,6 @@ const FilmApp = {
 function redirectToGenre(genre) {
     window.location.href = `anime-genres.html?genre=${encodeURIComponent(genre)}`;
 }
+
 
 document.addEventListener("DOMContentLoaded", () => FilmApp.init());
