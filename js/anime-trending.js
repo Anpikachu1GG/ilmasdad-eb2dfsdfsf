@@ -76,9 +76,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             card.innerHTML = `
                 <a class="details-link">
                     <img src="${anime.coverImage.large}" alt="${anime.title.romaji}" class="film-image" loading="lazy">
-                    <h2>${anime.title.romaji}</h2>
+                    <h2>${anime.title.english || anime.title.romaji}</h2>
                     <p><strong>Tổng số tập:</strong> ${anime.episodes || 'Chưa rõ'}</p>
-                    <p><strong>Điểm đánh giá:</strong> ⭐ ${anime.averageScore || 'N/A'}/100</p>
+                    <p><strong>Điểm đánh giá:</strong> ⭐ ${anime.averageScore || 'Chưa đánh giá'}/100</p>
                     <div class="film-overview">${anime.description || 'Không có mô tả.'}</div>
                 </a>
                 <button class="search-nguonc-button">Tìm kiếm</button>
