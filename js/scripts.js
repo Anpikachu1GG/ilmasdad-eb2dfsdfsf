@@ -85,53 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    /** 📌 Hàm tìm kiếm phim **/
-    const searchMovies = async (isPagination = false) => {
-        if (!isPagination) {
-            searchKeyword = searchInput.value.trim();
-            if (!searchKeyword) return alert("🔍 Vui lòng nhập từ khóa tìm kiếm.");
-            currentPage = 1;
-        }
-
-        isSearching = true;
-        filmContainer.innerHTML = '<h1 class="not-found">⏳ Đang tìm kiếm...</h1>';
-
-        const films = await fetchFilms(`https://phim.nguonc.com/api/films/search?keyword=${encodeURIComponent(searchKeyword)}&page=${currentPage}`);
-        if (!films.length) {
-            filmContainer.innerHTML = '<h1>⚠️ Không tìm thấy kết quả phù hợp.</h1>';
-            return;
-        }
-
-        let filmHTML = films.map(film => `
-            <div class="film-card" id="film-${film.slug}">
-                <a href="film-details.html?slug=${film.slug}" class="details-link">
-                    <img src="${film.thumb_url}" alt="${film.original_name}" class="film-image">
-                    <h2>${film.name}</h2>
-                    <p><strong>Tổng số tập:</strong> ${film.total_episodes || 'Chưa rõ'}</p>
-                    <p><strong>Tập hiện tại:</strong> ${film.current_episode || 'Chưa rõ'}</p>
-                    <p><strong>Điểm TMDB:</strong> <span id="rating-${film.slug}">⏳ Đang cập nhật...</span></p>
-                </a>
-            </div>
-        `).join('');
-
-        filmContainer.innerHTML = filmHTML;
-
-        const filmNames = films.map(film => film.original_name);
-        const ratings = await getTmdbRatings(filmNames);
-
-        films.forEach(film => {
-            document.getElementById(`rating-${film.slug}`).textContent = ratings[film.original_name] || 'N/A';
-        });
-
-        prevBtns.forEach(btn => btn.disabled = currentPage === 1);
-        nextBtns.forEach(btn => btn.disabled = films.length < 10);
-
-        // Update the page input field with the current page
-        if (pageInput) {
-            pageInput.value = currentPage;
-        }
-    };
-
     /** 📌 Hàm điều hướng trang **/
     const handlePagination = (action) => {
         const pageInput = document.getElementById('pageInput');
@@ -142,8 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!isNaN(targetPage) && targetPage >= 1) currentPage = targetPage;
             else return alert("⚠️ Vui lòng nhập số trang hợp lệ!");
         }
-
-        isSearching ? searchMovies(true) : loadFilms(currentPage);
     };
 
     if (backToTopButton) {
@@ -163,11 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
         prevBtns.forEach(btn => btn.addEventListener('click', () => handlePagination('prev')));
         nextBtns.forEach(btn => btn.addEventListener('click', () => handlePagination('next')));
         goToPageBtns.forEach(btn => btn.addEventListener('click', () => handlePagination('goTo')));
-
-        document.getElementById('search-button')?.addEventListener('click', searchMovies);
-        searchInput?.addEventListener('keypress', event => {
-            if (event.key === 'Enter') searchMovies();
-        });
     };
 
     /** 📌 Khởi chạy ứng dụng **/
