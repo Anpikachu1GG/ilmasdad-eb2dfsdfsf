@@ -59,10 +59,10 @@ const FilmApp = {
         const container = document.getElementById("anime-genres");
         if (!container) return console.error("Không tìm thấy phần tử 'anime-genres'");
 
-        container.innerHTML = "<p>Đang tải...</p>";
+        container.innerHTML = '<h1 class="not-found">Đang tải...</h1>';
 
         if (animes.length === 0) {
-            container.innerHTML = "<p>Không tìm thấy anime nào.</p>";
+            container.innerHTML = '<h1 class="not-found">Không tìm thấy anime nào.</h1>';
             return;
         }
 
@@ -142,8 +142,8 @@ const FilmApp = {
     loadAnimeByGenre() {
         const genre = this.getQueryParam("genre");
         if (!genre) return;
-
-        document.getElementById("anime-genres").innerHTML = "<p>Đang tải...</p>";
+        document.title = `${genre}`;
+        document.getElementById("anime-genres").innerHTML = '<h1 class="not-found">Đang tải...</h1>';
 
         this.fetchAnimeByGenre(genre, this.currentPage)
             .then(animes => {

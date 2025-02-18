@@ -61,10 +61,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     const displayAnime = async (animeList) => {
-        elements.filmContainer.innerHTML = "<p>Đang tải...</p>";
+        elements.filmContainer.innerHTML = '<h1 class="not-found">Đang tải...</h1>';
 
         if (!animeList.length) {
-            elements.filmContainer.innerHTML = "<p>Không tìm thấy anime nào.</p>";
+            elements.filmContainer.innerHTML = '<h1 class="not-found">Không tìm thấy anime nào.</h1>';
             return;
         }
 

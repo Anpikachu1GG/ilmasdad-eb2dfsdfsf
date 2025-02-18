@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Display movies
     const displayMovies = async (movies) => {
-        elements.filmContainer.innerHTML = movies.length ? '' : '<p>Không tìm thấy phim nào.</p>';
+        elements.filmContainer.innerHTML = movies.length ? '' : '<h1 class="not-found">Không tìm thấy phim nào.</h1>';
         const detailsList = await Promise.all(movies.map(movie => fetchDetails(movie.id)));
 
         detailsList.forEach(details => {

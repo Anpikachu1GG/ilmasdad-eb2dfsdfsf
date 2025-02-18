@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const container = document.getElementById('film-details-container');
 
     if (!slug) {
-        container.innerHTML = '<p>Không tìm thấy phim.</p>';
+        container.innerHTML = '<h1 class="not-found">Không tìm thấy phim.</p>';
         return;
     }
     if (movieTitle) {
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadRelatedFilms(genres.map(g => g.slug));
     } catch (error) {
         console.error('❌ Lỗi khi tải phim:', error);
-        container.innerHTML = '<p>Không thể tải thông tin phim. Vui lòng thử lại sau.</p>';
+        container.innerHTML = '<h1 class="not-found">Không thể tải thông tin phim. Vui lòng thử lại sau.</h1>';
     }
 });
 
@@ -98,10 +98,10 @@ async function getTmdbRating(originalName) {
 
 async function loadRelatedFilms(categorySlugs) {
     const relatedContainer = document.getElementById('related-films');
-    relatedContainer.innerHTML = '<p>Đang tải phim liên quan...</p>';
+    relatedContainer.innerHTML = '<h1 class="not-found">Đang tải phim liên quan...</h1>';
     
     if (!categorySlugs.length) {
-        relatedContainer.innerHTML = '<p>Không có phim liên quan.</p>';
+        relatedContainer.innerHTML = '<h1 class="not-found">Không có phim liên quan.</h1>';
         return;
     }
 
@@ -124,7 +124,7 @@ async function loadRelatedFilms(categorySlugs) {
         `).join('');
     } catch (error) {
         console.error('❌ Lỗi lấy phim liên quan:', error);
-        relatedContainer.innerHTML = '<p>Không thể tải phim liên quan.</p>';
+        relatedContainer.innerHTML = '<h1 class="not-found">Không thể tải phim liên quan.</h1>';
     }
 }
 

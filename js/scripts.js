@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const films = await fetchFilms(`https://phim.nguonc.com/api/films/phim-moi-cap-nhat?page=${page}`);
         if (!films.length) {
-            filmContainer.innerHTML = '<p>⚠️ Không tìm thấy phim nào.</p>';
+            filmContainer.innerHTML = '<h1 class="not-found">⚠️ Không tìm thấy phim nào.</h1>';
             return;
         }
 
@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         isSearching = true;
-        filmContainer.innerHTML = '<p>⏳ Đang tìm kiếm...</p>';
+        filmContainer.innerHTML = '<h1 class="not-found">⏳ Đang tìm kiếm...</h1>';
 
         const films = await fetchFilms(`https://phim.nguonc.com/api/films/search?keyword=${encodeURIComponent(searchKeyword)}&page=${currentPage}`);
         if (!films.length) {

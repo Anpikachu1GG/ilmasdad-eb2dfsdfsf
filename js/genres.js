@@ -34,7 +34,7 @@ window.FilmApp = {
     // Hiển thị danh sách phim
     async renderFilms(films) {
         const container = document.getElementById("film-container");
-        container.innerHTML = "<p>⏳ Đang tải dữ liệu...</p>";
+        container.innerHTML = '<h1 class="not-found">⏳ Đang tải dữ liệu...</h1>';
 
         const filmsWithRatings = await Promise.all(
             films.map(async (film) => {
@@ -62,10 +62,16 @@ window.FilmApp = {
 
     // Tải phim theo danh mục
     async loadFilmsByCategory(category, slug) {
+        // Fetch the films by category
         const films = await this.fetchMovies(category, slug, this.currentPage);
+    
+        // Update the page title to reflect the genre name
+        document.title = `Phim ${slug}`;
+    
+        // Render the films and update pagination controls
         this.renderFilms(films);
         this.updatePaginationControls(films.length);
-    },
+    },    
 
     // Xử lý tìm kiếm phim
     async searchMovies() {
@@ -118,7 +124,6 @@ window.FilmApp = {
         const category = this.getQueryParam("category") || "the-loai";
         const slug = this.getQueryParam("slug");
         if (slug) this.loadFilmsByCategory(category, slug);
-
         this.setupPagination();
     },
 };

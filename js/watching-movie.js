@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     if (!embedURL || !episodeName || !movieTitle) {
-        document.getElementById('video-player-container').innerHTML = '<p>Không tìm thấy thông tin video.</p>';
+        document.getElementById('video-player-container').innerHTML = '<h1 class="not-found">Không tìm thấy thông tin video.</h1>';
         return;
     }
 
