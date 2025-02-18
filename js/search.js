@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Hiển thị kết quả tìm kiếm
     async function loadSearchResults(page = 1) {
         const keyword = getQueryParameter('keyword');
-        const filmContainer = document.getElementById('film-container');
+        const filmContainer = document.getElementById('film-search-container');
 
         if (!keyword) {
             filmContainer.innerHTML = '<h1 class="not-found">⚠️ Vui lòng nhập từ khóa để tìm kiếm.</h1>';

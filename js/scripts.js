@@ -95,6 +95,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!isNaN(targetPage) && targetPage >= 1) currentPage = targetPage;
             else return alert("⚠️ Vui lòng nhập số trang hợp lệ!");
         }
+        if (isSearching) {
+            searchMovies(true); // Gọi lại tìm kiếm nhưng giữ nguyên từ khóa
+        } else {
+            loadFilms(currentPage);
+        }
     };
 
     if (backToTopButton) {
