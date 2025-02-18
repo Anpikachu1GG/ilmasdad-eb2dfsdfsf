@@ -157,11 +157,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /** 📌 Hàm bật/tắt chế độ sáng/tối **/
-    const toggleTheme = () => {
-        document.body.classList.toggle('light-theme');
-        localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
-        toggleBtn.textContent = document.body.classList.contains('light-theme') ? '🌞' : '🌙';
-    };
 
     /** 📌 Cài đặt sự kiện **/
     const setupEventListeners = () => {
@@ -173,8 +168,6 @@ document.addEventListener('DOMContentLoaded', () => {
         searchInput?.addEventListener('keypress', event => {
             if (event.key === 'Enter') searchMovies();
         });
-
-        toggleBtn?.addEventListener('click', toggleTheme);
     };
 
     /** 📌 Khởi chạy ứng dụng **/
