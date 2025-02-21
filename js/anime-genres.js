@@ -108,7 +108,7 @@ const FilmApp = {
                 <p><strong>Thể loại:</strong> ${anime.genres.join(', ') || 'Chưa có'}</p>
                 <div class="film-overview hidden">${anime.description || 'Không có mô tả.'}</div>
             </a>
-            <button class="search-nguonc-button" data-title="${anime.title?.english, anime.title?.romaji || 'Không rõ'}">Tìm kiếm</button>
+            <button class="search-nguonc-button" data-title="${anime.title?.english, anime.title?.romaji}">Tìm kiếm</button>
         `;
     },
 

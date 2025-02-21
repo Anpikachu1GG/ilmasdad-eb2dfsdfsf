@@ -93,7 +93,7 @@ window.FilmApp = {
         const pageInput = document.querySelector("#pageInput, #pageInput-bottom");
 
         prevBtns.forEach(btn => btn.disabled = this.currentPage === 1);
-        nextBtns.forEach(btn => btn.disabled = filmCount < 12);
+        nextBtns.forEach(btn => btn.disabled = filmCount < 10); // Assuming 12 films per page
         pageInput.value = this.currentPage;
     },
 

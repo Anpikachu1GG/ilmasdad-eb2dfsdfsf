@@ -44,12 +44,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const filmContainer = document.getElementById('film-search-container');
 
         if (!keyword) {
-            filmContainer.innerHTML = '<h1 class="not-found">⚠️ Vui lòng nhập từ khóa để tìm kiếm.</h1>';
+            filmContainer.innerHTML = "<h1>⚠️ Vui lòng nhập từ khóa để tìm kiếm.</h1>";
             return;
         }
 
         searchInput.value = keyword; // Hiển thị từ khóa trong ô tìm kiếm
-        filmContainer.innerHTML = '<h1 class="not-found">⏳ Đang tải kết quả...</h1>';
+        filmContainer.innerHTML = "<h1>⏳ Đang tải kết quả...</h1>";
 
         try {
             const response = await axios.get(`https://phim.nguonc.com/api/films/search?keyword=${encodeURIComponent(keyword)}&page=${page}`);
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Cập nhật trạng thái phân trang
             previousButton.disabled = page === 1;
-            nextButton.disabled = films.length < 10; // Giả sử mỗi trang có 10 phim
+            nextButton.disabled = films.length < 12; // Giả sử mỗi trang có 10 phim
 
             // Set the current page in the page input field
             if (pageInput) {
