@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Cập nhật trạng thái phân trang
             previousButton.disabled = page === 1;
-            nextButton.disabled = films.length < 12; // Giả sử mỗi trang có 10 phim
+            nextButton.disabled = films.length < 10; // Giả sử mỗi trang có 10 phim
 
             // Set the current page in the page input field
             if (pageInput) {
