@@ -430,3 +430,18 @@ h1.mb-0 {
     outline: none;
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.5);
 }
+
+@media (max-width: 1024px) and (min-width: 986px) {
+    /* CSS mặc định cho ô tìm kiếm */
+#search-input {
+    width: 10%;
+    min-width: 40px; /* Đảm bảo không nhỏ hơn 80px */
+    transition: width 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+#search-input:focus {
+    width: 70%;
+    min-width: 125px; /* Đảm bảo không nhỏ hơn 200px khi focus */
+    transform-origin: right;
+}
+}
