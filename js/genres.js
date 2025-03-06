@@ -34,7 +34,7 @@ window.FilmApp = {
     // Hiển thị danh sách phim
     async renderFilms(films) {
         const container = document.getElementById("film-container");
-        container.innerHTML = '<h1 class="not-found">⏳ Đang tải dữ liệu...</h1>';
+        this.showLoader();
 
         const filmsWithRatings = await Promise.all(
             films.map(async (film) => {
@@ -58,7 +58,18 @@ window.FilmApp = {
                 </div>
             `).join("")
             : "<p>Không tìm thấy phim nào.</p>";
-    },
+            this.hideLoader(); // Ẩn loader sau khi tải xong
+        },
+    
+        showLoader() {
+            const loader = document.querySelector(".wheel-and-hamster");
+            if (loader) loader.style.display = "flex";
+        },
+    
+        hideLoader() {
+            const loader = document.querySelector(".wheel-and-hamster");
+            if (loader) loader.style.display = "none";
+        },
 
     // Tải phim theo danh mục
     async loadFilmsByCategory(category, slug) {

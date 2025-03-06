@@ -144,14 +144,21 @@
                             <i class="fas fa-search"></i>
                         </button>
                         <!-- Nút chuyển đổi chế độ sáng/tối -->
-                <button id="toggle-theme-btn" class="btn btn-outline-light ms-3">
-                    🌙
-                </button>
+                        <label class="switch">
+                            <input type="checkbox" class="input__check">
+                            <span class="slider"></span>
+                        </label>
                     </div>
                 </nav>
             <div id="video-player-container"></div>
             <div id="episode-list-container"></div>
-            <button id="back-to-top" class="btn btn-secondary position-fixed bottom-0 end-0 m-3">Quay về đầu trang</button>
+            <button id="back-to-top" class="btn btn-secondary position-fixed bottom-0 end-0 m-3">
+                <svg class="svgIcon" viewBox="0 0 384 512">
+                    <path
+                      d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"
+                    ></path>
+                  </svg>
+                </button>
             <script>
                 function redirectToTrending(type, timeframe) {
                     window.location.href = `trending.html?type=${type}&timeframe=${timeframe}`;

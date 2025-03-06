@@ -45,11 +45,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /** 📌 Hàm tải danh sách phim nhanh hơn **/
     const loadFilms = async (page) => {
+        showLoader();
         filmContainer.innerHTML = '<h1>⏳ Đang tải phim...</h1>';
 
         const films = await fetchFilms(`https://phim.nguonc.com/api/films/phim-moi-cap-nhat?page=${page}`);
         if (!films.length) {
             filmContainer.innerHTML = '<h1 class="not-found">⚠️ Không tìm thấy phim nào.</h1>';
+            hideLoader();
             return;
         }
 
@@ -83,6 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (pageInput) {
             pageInput.value = currentPage;
         }
+
+        hideLoader();
     };
 
     /** 📌 Hàm điều hướng trang **/
@@ -129,3 +133,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     init();
 });
+
+function showLoader() {
+    const loader = document.querySelector(".wheel-and-hamster");
+    if (loader) loader.style.display = "flex";
+}
+
+function hideLoader() {
+    const loader = document.querySelector(".wheel-and-hamster");
+    if (loader) loader.style.display = "none";
+}

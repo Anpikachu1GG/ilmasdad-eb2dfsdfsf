@@ -5,10 +5,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         prevBtns: document.querySelectorAll('#previous, #previous-bottom'),
         nextBtns: document.querySelectorAll('#next, #next-bottom'),
         goToPageBtns: document.querySelectorAll('#goToPage, #goToPage-bottom'),
-        pageInputs: document.querySelectorAll('#pageInput, #pageInput-bottom')
+        pageInputs: document.querySelectorAll('#pageInput, #pageInput-bottom'),
+        showLoader() {
+            const loader = document.querySelector(".wheel-and-hamster");
+            if (loader) loader.style.display = "flex";
+        },
+        hideLoader() {
+            const loader = document.querySelector(".wheel-and-hamster");
+            if (loader) loader.style.display = "none";
+        }
     };
 
     const fetchAniListTrending = async (page = 1) => {
+        elements.showLoader();
         const query = `
             query ($page: Int, $perPage: Int) {
                 Page(page: $page, perPage: $perPage) {
@@ -36,6 +45,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (error) {
             console.error("Lỗi khi lấy danh sách trending từ AniList API:", error);
             return [];
+        } finally {
+            elements.hideLoader();
         }
     };
 
@@ -83,7 +94,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 </a>
                 <button class="search-nguonc-button">Tìm kiếm</button>
             `;
-
+            
             card.querySelector(".search-nguonc-button").addEventListener("click", () => 
                 searchOnNguonc(anime.title.english, anime.title.romaji));
 
@@ -118,9 +129,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
     const loadTrending = async () => {
+        elements.showLoader();
         const trendingAnime = await fetchAniListTrending(currentPage);
         await displayAnime(trendingAnime);
         updatePaginationControls(trendingAnime.length);
+        elements.hideLoader();
     };
 
     elements.prevBtns.forEach(btn => btn.addEventListener("click", () => handlePagination("prev")));

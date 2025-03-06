@@ -52,7 +52,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                         : '<li>Không có tập nào.</li>'
                     }
                     ${film.episodes?.[0]?.items.length > 30
-                        ? `<button id="show-more-episodes" class="show-more-btn">Xem thêm</button>`
+                        ? `<button id="show-more-episodes" class="show-more-btn button">
+                            <div><span>Xem thêm</span></div>
+                            </button>`
                         : ''}
                 </ul>
                 <h3>Phim có cùng thể loại:</h3>

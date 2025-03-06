@@ -131,9 +131,10 @@
                         <i class="fas fa-search"></i>
                     </button>
                     <!-- Nút chuyển đổi chế độ sáng/tối -->
-            <button id="toggle-theme-btn" class="btn btn-outline-light ms-3">
-                🌙
-            </button>
+                    <label class="switch">
+                        <input type="checkbox" class="input__check">
+                        <span class="slider"></span>
+                    </label>
                 </div>
             </nav>
                 <main class="container mt-4">
@@ -157,6 +158,24 @@
                         <button id="goToPage" class="btn btn-primary ms-2">Đi</button>
                         <button id="next" class="btn btn-danger ms-2">Trang Tiếp Theo</button>
                     </div>
+                    <div aria-label="Orange and tan hamster running in a metal wheel" role="img" class="wheel-and-hamster">
+                        <div class="wheel"></div>
+                        <div class="hamster">
+                            <div class="hamster__body">
+                                <div class="hamster__head">
+                                    <div class="hamster__ear"></div>
+                                    <div class="hamster__eye"></div>
+                                    <div class="hamster__nose"></div>
+                                </div>
+                                <div class="hamster__limb hamster__limb--fr"></div>
+                                <div class="hamster__limb hamster__limb--fl"></div>
+                                <div class="hamster__limb hamster__limb--br"></div>
+                                <div class="hamster__limb hamster__limb--bl"></div>
+                                <div class="hamster__tail"></div>
+                            </div>
+                        </div>
+                        <div class="spoke"></div>
+                    </div>
                     <h1 class="text-center mb-4"> Danh sách dưới chỉ để tham khảo, để đọc thêm về nội dung phim hay xem phim hãy bấm vào nút tìm kiếm</h1>
                     <ul id="anime-genres">
                         <!-- Danh sách phim sẽ được chèn vào đây -->
@@ -167,7 +186,13 @@
                         <button id="goToPage-bottom" class="btn btn-primary ms-2">Đi</button>
                         <button id="next-bottom" class="btn btn-danger ms-2">Trang Tiếp Theo</button>
                     </div>
-                    <button id="back-to-top" class="btn btn-secondary position-fixed bottom-0 end-0 m-3">Quay về đầu trang</button>
+                    <button id="back-to-top" class="btn btn-secondary position-fixed bottom-0 end-0 m-3">
+                        <svg class="svgIcon" viewBox="0 0 384 512">
+                            <path
+                              d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"
+                            ></path>
+                          </svg>
+                        </button>
                 </main>
                     <script>
                     function redirectToTrending(type, timeframe) {

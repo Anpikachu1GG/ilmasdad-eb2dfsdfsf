@@ -120,10 +120,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         await loadTrending();
     };
 
+    function showLoader() {
+        const loader = document.querySelector(".wheel-and-hamster");
+        if (loader) loader.style.display = "flex";
+    }
+
+    function hideLoader() {
+        const loader = document.querySelector(".wheel-and-hamster");
+        if (loader) loader.style.display = "none";
+    }
+
     // Load trending films
     const loadTrending = async () => {
+        showLoader();
         const trending = await fetchTrending(currentPage);
         await displayMovies(trending?.results || []);
+        hideLoader();
     };
 
     // Hàm tìm kiếm trên `nguonc.com`

@@ -92,7 +92,7 @@ const FilmApp = {
         document.querySelectorAll(".search-nguonc-button").forEach(button =>
             button.addEventListener("click", () => this.searchOnNguonc(button.dataset.title))
         );
-
+        this.hideLoader(); // Ẩn loader sau khi tải xong
         this.updatePaginationControls(animes.length);
     },
 
@@ -110,7 +110,17 @@ const FilmApp = {
             </a>
             <button class="search-nguonc-button" data-title="${anime.title?.english, anime.title?.romaji}">Tìm kiếm</button>
         `;
-    },
+        },
+    
+        showLoader() {
+            const loader = document.querySelector(".wheel-and-hamster");
+            if (loader) loader.style.display = "flex";
+        },
+    
+        hideLoader() {
+            const loader = document.querySelector(".wheel-and-hamster");
+            if (loader) loader.style.display = "none";
+        },
 
     updatePaginationControls(filmCount) {
         const previousButtons = document.querySelectorAll("#previous, #previous-bottom");
@@ -143,7 +153,7 @@ const FilmApp = {
         const genre = this.getQueryParam("genre");
         if (!genre) return;
         document.title = `${genre}`;
-        document.getElementById("anime-genres").innerHTML = '<h1 class="not-found">Đang tải...</h1>';
+        document.getElementById("anime-genres").innerHTML = this.showLoader();
 
         this.fetchAnimeByGenre(genre, this.currentPage)
             .then(animes => {
