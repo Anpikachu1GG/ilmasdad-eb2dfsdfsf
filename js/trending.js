@@ -76,7 +76,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <p><strong>Điểm đánh giá:</strong> ⭐ ${details.rating}/10</p>
                     <div class='film-overview hidden'>${details.overview}</div>
                 </a>
-                <button class='search-nguonc-button'>Tìm kiếm</button>
+                <button class='search-nguonc-button'>
+                Tìm Kiếm
+            </button>
             `;
 
             filmCard.addEventListener('mouseenter', () => {

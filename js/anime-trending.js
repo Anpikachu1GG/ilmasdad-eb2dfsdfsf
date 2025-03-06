@@ -92,7 +92,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <p><strong>Điểm đánh giá:</strong> ⭐ ${anime.averageScore || 'Chưa đánh giá'}/100</p>
                     <div class="film-overview">${anime.description || 'Không có mô tả.'}</div>
                 </a>
-                <button class="search-nguonc-button">Tìm kiếm</button>
+                <button class='search-nguonc-button'>
+                Tìm Kiếm
+            </button>
             `;
             
             card.querySelector(".search-nguonc-button").addEventListener("click", () => 

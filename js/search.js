@@ -136,9 +136,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (backToTopButton) {
         window.addEventListener("scroll", function () {
             if (window.scrollY > 100) {
-              backToTopBtn.style.display = "flex"; // Hiển thị nút khi cuộn xuống
+                backToTopButton.style.display = "flex"; // Hiển thị nút khi cuộn xuống
             } else {
-              backToTopBtn.style.display = "none"; // Ẩn khi ở đầu trang
+                backToTopButton.style.display = "none"; // Ẩn khi ở đầu trang
             }
           });
 
