@@ -1,7 +1,7 @@
 :root {
     /* Biến màu chung */
-    --primary-color: #bbff00; /* Màu chính */
-    --secondary-color: #640055; /* Màu phụ */
+    --primary-color: #000000;
+    --secondary-color: #0032c8;
     --background-color: #181818; /* Màu nền tối */
     --text-color: #000000; /* Màu chữ chính */
     --secondary-text-color: #ffffff; /* Màu chữ phụ */
@@ -23,8 +23,8 @@ body.light-theme {
     --navbar-bg-color: #ff0000;
     --card-border-color-light: #000000;
     --h1-dark-color: #000000;
-    --primary-color: #ff0000;
-    --secondary-color: #004a22;
+    --primary-color: #ffffff; /* Màu chính */
+    --secondary-color: #b30f9a; /* Màu phụ */
 }
 
 .light-theme {
@@ -410,5 +410,54 @@ button {
   #back-to-top:hover::after {
     opacity: 1;
     transform: translateY(0);
+  }
+  
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8em 1.5em;
+    background: none;
+    border: 2px solid #00ff4c;
+    font-size: 15px;
+    color: #00ff4c;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    border-radius: 8px;
+    font-weight: bold;
+    background-color: transparent;
+    box-shadow: 0 2px 0 2px rgba(0, 0, 0, 0.2);
+  }
+  
+  .btn i {
+    margin-right: 5px; /* Giúp icon không bị dính vào text */
+  }
+  
+  .btn:before {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 120%;
+    background-color: #00ff4c;
+    top: 50%;
+    transform: skewX(30deg) translate(-150%, -50%);
+    transition: all 0.5s;
+  }
+  
+  .btn:hover {
+    background-color: #00ff4c;
+    color: #fff;
+    box-shadow: 0 2px 0 2px rgba(0, 0, 0, 0.3);
+  }
+  
+  .btn:hover::before {
+    transform: skewX(30deg) translate(150%, -50%);
+    transition-delay: 0.1s;
+  }
+  
+  .btn:active {
+    transform: scale(0.95);
   }
   
