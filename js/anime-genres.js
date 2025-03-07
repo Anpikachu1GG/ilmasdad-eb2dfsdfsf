@@ -80,7 +80,7 @@ const FilmApp = {
             // Áp dụng giới hạn cho mô tả
             overview.style.display = "-webkit-box";
             overview.style.webkitBoxOrient = "vertical";
-            overview.style.webkitLineClamp = "19";  // Giới hạn mô tả ở 5 dòng
+            overview.style.webkitLineClamp = "16";  // Giới hạn mô tả ở 5 dòng
             overview.style.overflow = "hidden";
 
             fragment.appendChild(card);
