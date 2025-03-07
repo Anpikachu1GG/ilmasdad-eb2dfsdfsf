@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const overview = card.querySelector(".film-overview");
             overview.style.display = "-webkit-box";
             overview.style.webkitBoxOrient = "vertical";
-            overview.style.webkitLineClamp = "19";
+            overview.style.webkitLineClamp = "16";
             overview.style.overflow = "hidden";
 
             fragment.appendChild(card);
