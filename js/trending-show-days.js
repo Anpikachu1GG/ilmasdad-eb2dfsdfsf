@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const overview = filmCard.querySelector('.film-overview');
             overview.style.display = '-webkit-box';
             overview.style.webkitBoxOrient = 'vertical';
-            overview.style.webkitLineClamp = '16';
+            overview.style.webkitLineClamp = '15';
             overview.style.overflow = 'hidden';
 
             filmCard.querySelector('.search-nguonc-button').addEventListener('click', () => searchOnNguonc(details.nameEN, details.nameVN));
