@@ -177,16 +177,15 @@ button {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 15px;
-    padding-bottom: 15px;
     margin-top: 20px;
-      max-height: 720px;
+    padding-bottom: 20px;
       overflow: hidden;
       position: relative;
       transition: max-height 0.3s ease-in-out;
 }
 
 #watch-history-container.show-all {
-  max-height: none; /* Bỏ giới hạn khi mở rộng */
+  max-height: none; 
 }
 
 #film-search-container {

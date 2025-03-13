@@ -172,7 +172,6 @@ function displayWatchHistory() {
     });
 }
 
-
 displayWatchHistory();
 
 function showLoader() {
@@ -184,3 +183,27 @@ function hideLoader() {
     const loader = document.querySelector(".wheel-and-hamster");
     if (loader) loader.style.display = "none";
 }
+
+function adjustMaxHeight() {
+    const historyContainer = document.getElementById('watch-history-container');
+    const filmCards = historyContainer.querySelectorAll('.film-card');
+
+    if (filmCards.length === 0) return;
+
+    // Chỉ lấy 4 phim đầu tiên
+    const firstFourFilms = Array.from(filmCards).slice(0, 4);
+
+    // Tìm phim có chiều cao lớn nhất
+    let maxHeight = 0;
+    firstFourFilms.forEach(film => {
+        const height = film.offsetHeight;
+        if (height > maxHeight) maxHeight = height;
+    });
+
+    // Set max-height cho watch-history-container
+    historyContainer.style.maxHeight = `${maxHeight + 13}px`;
+}
+
+// Gọi hàm sau khi cập nhật danh sách phim
+displayWatchHistory();
+setTimeout(adjustMaxHeight, 100);  // Đợi 100ms để đảm bảo các thẻ phim đã được render xong
