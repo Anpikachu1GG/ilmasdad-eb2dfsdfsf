@@ -48,11 +48,11 @@ window.FilmApp = {
                 <div class="film-card">
                     <a href="film-details.html?slug=${film.slug}" class="details-link">
                         <img src="${film.thumb_url}" alt="${film.name}" class="film-image">
-                        <h2>${film.name}</h2>
-                        <p><strong>Tổng số tập:</strong> ${film.total_episodes}</p>
-                        <p><strong>Tập hiện tại:</strong> ${film.current_episode}</p>
-                        <p><strong>Đạo diễn:</strong> ${film.director}</p>
-                        <p><strong>Dàn diễn viên:</strong> ${film.casts}</p>
+                        <h2>${film.name|| 'Chưa có thông tin'}</h2>
+                        <p><strong>Tổng số tập:</strong> ${film.total_episodes|| 'Chưa có thông tin'}</p>
+                        <p><strong>Tập hiện tại:</strong> ${film.current_episode|| 'Chưa có thông tin'}</p>
+                        <p><strong>Đạo diễn:</strong> ${film.director|| 'Chưa có thông tin'}</p>
+                        <p><strong>Dàn diễn viên:</strong> ${film.casts|| 'Chưa có thông tin'}</p>
                         <p><strong>⭐ Đánh giá:</strong> ${film.rating}/10</p>
                     </a>
                 </div>

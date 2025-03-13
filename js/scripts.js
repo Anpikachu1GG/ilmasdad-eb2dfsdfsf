@@ -134,19 +134,36 @@ document.addEventListener('DOMContentLoaded', () => {
     init();
 });
 
-function displayWatchHistory() {
-    const watchHistory = JSON.parse(localStorage.getItem('watchHistory')) || [];
-    const historyContainer = document.getElementById('watch-history-container');
+displayWatchHistory();
 
+function showLoader() {
+    const loader = document.querySelector(".wheel-and-hamster");
+    if (loader) loader.style.display = "flex";
+}
+
+function hideLoader() {
+    const loader = document.querySelector(".wheel-and-hamster");
+    if (loader) loader.style.display = "none";
+}
+
+function displayWatchHistory() {
+    let watchHistory = JSON.parse(localStorage.getItem('watchHistory')) || [];
+
+    // Giới hạn chỉ lưu 4 phim, nếu có hơn 4 thì xóa phim cũ nhất
+    if (watchHistory.length > 4) {
+        watchHistory = watchHistory.slice(0, 4);
+        localStorage.setItem('watchHistory', JSON.stringify(watchHistory));
+    }
+
+    const historyContainer = document.getElementById('watch-history-container');
     if (!historyContainer) return;
 
     historyContainer.innerHTML = watchHistory.length ? '' : '<h1 class="not-found">Không có lịch sử xem.</h1>';
 
-    watchHistory.forEach(film => {  // Không còn giới hạn số lượng phim
+    watchHistory.forEach(film => {
         let filmCard = document.getElementById(`film-${film.slug}`);
 
         if (filmCard) {
-            // Nếu phim đã có trong danh sách, chỉ cập nhật "Tập đang xem"
             let episodeInfo = filmCard.querySelector('.current-episode');
             if (episodeInfo) {
                 episodeInfo.innerHTML = `<strong>Tập đang xem:</strong> Tập ${film.episodeName}`;
@@ -172,38 +189,3 @@ function displayWatchHistory() {
     });
 }
 
-displayWatchHistory();
-
-function showLoader() {
-    const loader = document.querySelector(".wheel-and-hamster");
-    if (loader) loader.style.display = "flex";
-}
-
-function hideLoader() {
-    const loader = document.querySelector(".wheel-and-hamster");
-    if (loader) loader.style.display = "none";
-}
-
-function adjustMaxHeight() {
-    const historyContainer = document.getElementById('watch-history-container');
-    const filmCards = historyContainer.querySelectorAll('.film-card');
-
-    if (filmCards.length === 0) return;
-
-    // Chỉ lấy 4 phim đầu tiên
-    const firstFourFilms = Array.from(filmCards).slice(0, 4);
-
-    // Tìm phim có chiều cao lớn nhất
-    let maxHeight = 0;
-    firstFourFilms.forEach(film => {
-        const height = film.offsetHeight;
-        if (height > maxHeight) maxHeight = height;
-    });
-
-    // Set max-height cho watch-history-container
-    historyContainer.style.maxHeight = `${maxHeight + 13}px`;
-}
-
-// Gọi hàm sau khi cập nhật danh sách phim
-displayWatchHistory();
-setTimeout(adjustMaxHeight, 100);  // Đợi 100ms để đảm bảo các thẻ phim đã được render xong
