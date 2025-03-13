@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <div id="related-films" class="related-films"></div>
             </div>
         `;
+        saveToWatchHistory(film);
 
         const showMoreButton = document.getElementById('show-more-episodes');
         if (showMoreButton) {
@@ -81,6 +82,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         loadRelatedFilms(genres.map(g => g.slug));
+        
     } catch (error) {
         console.error('❌ Lỗi khi tải phim:', error);
         container.innerHTML = '<h1 class="not-found">Không thể tải thông tin phim. Vui lòng thử lại sau.</h1>';
@@ -149,4 +151,11 @@ function toSlug(name) {
         .normalize('NFD').replace(/[̀-ͯ]/g, '')
         .replace(/đ/g, 'd').replace(/Đ/g, 'D')
         .replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
+}
+
+function saveToWatchHistory(film) {
+    let watchHistory = JSON.parse(localStorage.getItem('watchHistory')) || [];
+    watchHistory = watchHistory.filter(item => item.slug !== film.slug);
+    watchHistory.unshift(film);
+    localStorage.setItem('watchHistory', JSON.stringify(watchHistory));
 }

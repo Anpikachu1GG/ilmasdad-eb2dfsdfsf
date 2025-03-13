@@ -37,6 +37,32 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
+    // Lưu tập đang xem vào localStorage
+    const currentEpisode = {
+        slug: movieSlug,
+        episodeName: episodeName,
+        movieTitle: movieTitle,
+        timestamp: new Date().toISOString()
+    };
+
+    let watchHistory = JSON.parse(localStorage.getItem('watchHistory')) || [];
+
+    // Kiểm tra xem phim đã có trong lịch sử chưa
+    const existingMovieIndex = watchHistory.findIndex(item => item.slug === movieSlug);
+
+    if (existingMovieIndex !== -1) {
+        // Nếu phim đã có, chỉ cập nhật tập đang xem
+        watchHistory[existingMovieIndex].episodeName = episodeName;
+        watchHistory[existingMovieIndex].timestamp = currentEpisode.timestamp; // Cập nhật thời gian xem
+    } else {
+        // Nếu chưa có, thêm mới vào danh sách
+        watchHistory.unshift(currentEpisode);
+    }
+
+    // Lưu lại danh sách vào localStorage
+    localStorage.setItem('watchHistory', JSON.stringify(watchHistory));
+
+
     const currentIndex = episodes.findIndex(ep => ep.name === episodeName);
     const prevEpisode = episodes[currentIndex - 1] || null;
     const nextEpisode = episodes[currentIndex + 1] || null;

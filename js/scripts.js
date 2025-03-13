@@ -134,6 +134,47 @@ document.addEventListener('DOMContentLoaded', () => {
     init();
 });
 
+function displayWatchHistory() {
+    const watchHistory = JSON.parse(localStorage.getItem('watchHistory')) || [];
+    const historyContainer = document.getElementById('watch-history-container');
+
+    if (!historyContainer) return;
+
+    historyContainer.innerHTML = watchHistory.length ? '' : '<h1 class="not-found">Không có lịch sử xem.</h1>';
+
+    watchHistory.forEach(film => {  // Không còn giới hạn số lượng phim
+        let filmCard = document.getElementById(`film-${film.slug}`);
+
+        if (filmCard) {
+            // Nếu phim đã có trong danh sách, chỉ cập nhật "Tập đang xem"
+            let episodeInfo = filmCard.querySelector('.current-episode');
+            if (episodeInfo) {
+                episodeInfo.innerHTML = `<strong>Tập đang xem:</strong> Tập ${film.episodeName}`;
+            }
+        } else {
+            // Nếu chưa có, thêm mới vào danh sách
+            filmCard = document.createElement('div');
+            filmCard.className = 'film-card';
+            filmCard.id = `film-${film.slug}`;
+            filmCard.innerHTML = `
+                <a href="film-details.html?slug=${film.slug}" class="details-link">
+                <img src="${film.thumb_url || 'default-image.jpg'}" alt="${film.movieTitle || film.name}" class="film-image">
+                <h2>${film.movieTitle || film.name}</h2>
+                <p><strong>Tập đang xem:</strong> ${film.episodeName ? `Tập ${film.episodeName}` : 'Chưa xem'}</p>
+                <p><strong>Tổng số tập:</strong> ${film.total_episodes || 'Chưa có thông tin'}</p>
+                <p><strong>Tập hiện tại:</strong> ${film.current_episode || 'Chưa có thông tin'}</p>
+                <p><strong>Đạo diễn:</strong> ${film.director || 'Không rõ'}</p>
+                <p><strong>Dàn diễn viên:</strong> ${film.casts || 'Không rõ'}</p>
+            </a>
+            `;
+            historyContainer.appendChild(filmCard);
+        }
+    });
+}
+
+
+displayWatchHistory();
+
 function showLoader() {
     const loader = document.querySelector(".wheel-and-hamster");
     if (loader) loader.style.display = "flex";
