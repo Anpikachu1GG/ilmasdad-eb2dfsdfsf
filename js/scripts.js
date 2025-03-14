@@ -189,3 +189,24 @@ function displayWatchHistory() {
     });
 }
 
+document.addEventListener("DOMContentLoaded", function () {
+    let toggleBtn = document.getElementById("toggle-btn");
+    let container = document.getElementById("watch-history-container");
+
+    if (localStorage.getItem("watchHistoryHidden") === "true") {
+        container.classList.add("hidden");
+        toggleBtn.textContent = "Hiện";
+    }
+
+    toggleBtn.addEventListener("click", function () {
+        if (container.classList.contains("hidden")) {
+            container.classList.remove("hidden");
+            toggleBtn.textContent = "Ẩn";
+            localStorage.setItem("watchHistoryHidden", "false"); // Lưu trạng thái mở
+        } else {
+            container.classList.add("hidden");
+            toggleBtn.textContent = "Hiện";
+            localStorage.setItem("watchHistoryHidden", "true"); // Lưu trạng thái ẩn
+        }
+    });
+});
