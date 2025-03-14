@@ -148,8 +148,6 @@ function hideLoader() {
 
 function displayWatchHistory() {
     let watchHistory = JSON.parse(localStorage.getItem('watchHistory')) || [];
-
-    // Giới hạn chỉ lưu 4 phim, nếu có hơn 4 thì xóa phim cũ nhất
     if (watchHistory.length > 4) {
         watchHistory = watchHistory.slice(0, 4);
         localStorage.setItem('watchHistory', JSON.stringify(watchHistory));
@@ -169,7 +167,6 @@ function displayWatchHistory() {
                 episodeInfo.innerHTML = `<strong>Tập đang xem:</strong> Tập ${film.episodeName}`;
             }
         } else {
-            // Nếu chưa có, thêm mới vào danh sách
             filmCard = document.createElement('div');
             filmCard.className = 'film-card';
             filmCard.id = `film-${film.slug}`;
@@ -202,11 +199,11 @@ document.addEventListener("DOMContentLoaded", function () {
         if (container.classList.contains("hidden")) {
             container.classList.remove("hidden");
             toggleBtn.textContent = "Ẩn";
-            localStorage.setItem("watchHistoryHidden", "false"); // Lưu trạng thái mở
+            localStorage.setItem("watchHistoryHidden", "false");
         } else {
             container.classList.add("hidden");
             toggleBtn.textContent = "Hiện";
-            localStorage.setItem("watchHistoryHidden", "true"); // Lưu trạng thái ẩn
+            localStorage.setItem("watchHistoryHidden", "true");
         }
     });
 });

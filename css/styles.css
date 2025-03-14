@@ -266,23 +266,43 @@ button {
 }
 
 /* Footer */
-footer {
-    background-color: #000000;
-    color: #fff;
-    padding: 20px 0;
-    text-align: center;
+.footer {
+  background-color: #1a1a1a;
+  color: #f1f1f1;
+  padding: 20px;
+  text-align: center;
+  font-family: Arial, sans-serif;
 }
-footer p {
-    font-size: 0.9rem;
-    margin: 0;
+
+.footer a {
+  color: #f1f1f1;
+  text-decoration: none;
 }
-footer a {
-    color: #ffcc00;
-    text-decoration: none;
+
+.footer a:hover {
+  text-decoration: underline;
 }
-footer a:hover {
-    text-decoration: underline;
+
+.footer-content {
+  max-width: 800px;
+  margin: 0 auto;
 }
+
+.special-link {
+  font-weight: bold; /* Chữ đậm */
+  font-size: 18px;
+  color: #ff5722; /* Màu nổi bật */
+  text-decoration: none; /* Bỏ gạch chân */
+  border-bottom: 2px solid transparent; /* Thêm hiệu ứng gạch chân động */
+  transition: all 0.3s ease-in-out;
+}
+
+.special-link:hover {
+  color: #e64a19; /* Màu đậm hơn khi di chuột */
+  border-bottom: 2px solid #e64a19; /* Gạch chân khi hover */
+  transform: scale(1.1); /* Hiệu ứng phóng to nhẹ */
+}
+
 
 /* Responsive */
 @media (max-width: 821px) {
